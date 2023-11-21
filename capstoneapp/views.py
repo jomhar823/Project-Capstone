@@ -814,7 +814,7 @@ def new_reports(request):
 @mdrrmc_required
 @api_view(['GET'])
 def get_reports_for_today(request):
-    today = date.today()
+    today = timezone.now().date()     
     formatted_today = today.strftime('%Y-%m-%d')
     subject_query = request.GET.get('subject')
     page = request.GET.get('page', 1)
