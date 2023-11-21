@@ -823,7 +823,7 @@ def get_reports_for_today(request):
     if subject_query:
         today_reports = today_reports.filter(subject__icontains=subject_query)
 
-    today_reports = today_reports.order_by('-date_reported', '-time_reported')
+    today_reports = today_reports.order_by('-date_reported')
 
     items_per_page = 10  
 
