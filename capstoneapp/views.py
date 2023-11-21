@@ -814,16 +814,16 @@ def new_reports(request):
 @mdrrmc_required
 @api_view(['GET'])
 def get_reports_for_today(request):
-    today = date.today()
+    formatted_today = today.strftime('%Y-%m-%d')
     subject_query = request.GET.get('subject')
     page = request.GET.get('page', 1)
 
-    today_reports = Report.objects.filter(date_reported=today)
+    today_reports = Report.objects.filter(date_reported=formatted_today)
     
     if subject_query:
         today_reports = today_reports.filter(subject__icontains=subject_query)
 
-    today_reports = today_reports.order_by('-date_reported')
+    today_reports = today_reports.order_by('-date_reported', '-time_reported')
 
     items_per_page = 10  
 
