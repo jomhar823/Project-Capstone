@@ -559,7 +559,7 @@ def register(request):
                 user.is_staff = True
                 user.save()
                 
-            print(request.data)
+            messages.success(request, 'User successfully added.')
 
             return redirect('register')
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -601,7 +601,7 @@ def login_view(request):
             elif user_type == 'barangay':
                 return redirect('brgyhomepage')
         else:
-            print("Authentication failed")
+            messages.error(request, 'Authentication failed. Please check your credentials.')
 
     return render(request, 'login.html')
 

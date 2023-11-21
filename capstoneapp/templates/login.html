@@ -67,6 +67,14 @@
             width="180px"
           />
         </div>
+        {% for msg in messages %}
+          <div class="alert alert-{% if msg.tags == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
+              <strong>{{ msg }}</strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        {% endfor %}
         <h1 class="login-header-txt">MDRRMC IBAAN</h1>
         <form method="post" action="{% url 'login' %}">
           {% csrf_token %}
