@@ -267,7 +267,6 @@
                     data: { subject: subjectQuery },  
                     dataType: "json",
                     success: function (data) {
-                        console.log('reports for today',data)
                         updateReportsTable(data.reports, 'today-reports-table');
                     },
                     error: function (xhr, status, error) {

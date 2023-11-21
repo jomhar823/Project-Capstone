@@ -814,12 +814,11 @@ def new_reports(request):
 @mdrrmc_required
 @api_view(['GET'])
 def get_reports_for_today(request):
-    today = timezone.now().date()     
-    formatted_today = today.strftime('%Y-%m-%d')
+    today = date.today()
     subject_query = request.GET.get('subject')
     page = request.GET.get('page', 1)
 
-    today_reports = Report.objects.filter(date_reported=formatted_today)
+    today_reports = Report.objects.filter(date_reported=today)
     
     if subject_query:
         today_reports = today_reports.filter(subject__icontains=subject_query)
