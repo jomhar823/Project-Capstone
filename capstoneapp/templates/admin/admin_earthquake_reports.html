@@ -392,6 +392,7 @@
           attachment: $(this).data("attachment"),
           date: $(this).data("date"),
           time: $(this).data("time"),
+          origin: $(this).data("origin"),
 
         };
         selectedReport = report;
@@ -417,6 +418,8 @@
               ["Date Reported", selectedReport.date],
               ["Time Reported", selectedReport.time],
               ["Description", selectedReport.description],
+              ["Origin", selectedReport.origin],
+
             ];
 
             var columnWidths = [50, 100]; 
