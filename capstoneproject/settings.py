@@ -83,11 +83,11 @@ DATABASES = {
     'default':
     {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mdrrmc_ibaan',
+        'NAME': 'railway',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'PASSWORD': 'gafEEA3DGF1-fE3AgCGaD51-5F-a*daf',
+        'HOST': 'viaduct.proxy.rlwy.net',
+        'PORT': '31471',
     }
 }
 
@@ -134,7 +134,7 @@ STATICFILES_DIRS = [
 ]
 
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+STATIC_ROOT = BASE_DIR / "staticfiles_build"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
