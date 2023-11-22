@@ -104,8 +104,20 @@ def home_incident_reports(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'home_incident_reports.html', context)
@@ -123,8 +135,20 @@ def home_sit_reports(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'home_sit_reports.html', context)
@@ -142,8 +166,20 @@ def home_typhoon_reports(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'typhoon.html', context)
@@ -158,8 +194,20 @@ def home_flood_reports(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'flood.html', context)
@@ -190,8 +238,20 @@ def landslide(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'landslide.html', context)
@@ -206,8 +266,20 @@ def flood(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'flood.html', context)
@@ -261,8 +333,20 @@ def incident_reports(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'user/incident_reports.html', context)
@@ -278,8 +362,20 @@ def user_flood(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'user/user_flood.html', context)
@@ -294,8 +390,20 @@ def user_typhoon(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'user/user_typhoon.html', context)
@@ -326,8 +434,20 @@ def user_landslide(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'user/user_landslide.html', context)
@@ -342,8 +462,20 @@ def user_sit(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'user/user_sit.html', context)
@@ -598,8 +730,20 @@ def admin_incident_reports(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'admin/admin_incident_reports.html', context)
@@ -639,8 +783,20 @@ def admin_sit_reports(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'admin/admin_sit_reports.html', context)
@@ -656,8 +812,20 @@ def admin_typhoon_reports(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'admin/admin_typhoon_reports.html', context)
@@ -705,8 +873,20 @@ def admin_landslide_reports(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'admin/admin_landslide_reports.html', context)
