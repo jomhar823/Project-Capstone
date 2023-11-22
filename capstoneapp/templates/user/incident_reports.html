@@ -312,18 +312,8 @@
         function updateModalContent(report) {
           $("#modalSubject").text(report.subject);
           $("#modalDescription").text(report.description);
-          $("#modalAttachment").html("");
-          console.log('path',report.attachment)
+          $("#modalAttachment").text(report.attachment);
 
-          if (report.attachment) {
-            var attachmentLink = $("<a>")
-              .attr("href", report.attachment)
-              .attr("target", "_blank")
-              .text("View Attachment");
-            $("#modalAttachment").append(attachmentLink);
-          } else {
-            $("#modalAttachment").text("No attachment available");
-          }
     
           $("#modalDateReported").text(report.date_reported);
           $("#modalTimeReported").text(report.time_reported);
