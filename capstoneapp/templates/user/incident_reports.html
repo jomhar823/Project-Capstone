@@ -313,7 +313,8 @@
           $("#modalSubject").text(report.subject);
           $("#modalDescription").text(report.description);
           $("#modalAttachment").html("");
-    
+          console.log('path',report.attachment)
+
           if (report.attachment) {
             var attachmentLink = $("<a>")
               .attr("href", report.attachment)
