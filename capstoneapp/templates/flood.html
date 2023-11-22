@@ -273,6 +273,8 @@
         <p>&copy; 2023 Disaster Risk Management</p>
       </nav>
     </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.16/jspdf.plugin.autotable.min.js"></script>
     <script>
       $(document).ready(function () {
         window.jsPDF = window.jspdf.jsPDF;
@@ -330,20 +332,23 @@
         $("#apply-filter").on("click", function () {
           console.log("Apply filter button clicked");
           var selectedDate = $("#filter-date").val();
-
+          var selectedBarangay = $("#filter-barangay").val();
+          console.log("Selected Date: " + selectedDate);
+          console.log("Selected Barangay: " + selectedBarangay);
     
           $.ajax({
             url: "{% url 'get_filtered_reports_flood' %}",
             type: "GET",
             data: {
               date: selectedDate,
+              barangay: selectedBarangay,
             },
             success: function (data) {
               console.log("Received filtered reports data: ", data);
               
               $("#mainTable tbody").empty();
                 if (data.length === 0) {
-                var noReportRow = '<tr><td colspan="5">No report found</td></tr>';
+                var noReportRow = '<tr><td colspan="5">No incident report found</td></tr>';
                 $("#mainTable tbody").append(noReportRow);
               } else {
                 for (var i = 0; i < data.length; i++) {
@@ -356,7 +361,7 @@
                     day: "numeric",
                   });
     
-                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal"  data-report-id="{{report.id}}" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date-reported="' + report.date_reported + '" data-time-reported="' + report.time_reported + '" data-barangay="' + report.barangay + '" data-respondent="' + report.respondent_name + '" data-contact="' + report.contact_number + '">';
+                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date-reported="' + report.date_reported + '" data-time-reported="' + report.time_reported + '" data-barangay="' + report.barangay + '" data-respondent="' + report.respondent_name + '" data-contact="' + report.contact_number + '">';
                   newRow += '<td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg></td>';
                   newRow += '<td>' + report.subject + '</td>';
                   newRow += '<td>' + formattedDate + '</td>';
@@ -422,7 +427,6 @@
               margin: { top: 50 },              
             
           });
-
           if (selectedReport.attachment) {
             var img = new Image();
             img.crossOrigin = 'Anonymous'; 
@@ -448,6 +452,7 @@
           } else {
             doc.save('report.pdf');
           }
+
           }
         });
 
