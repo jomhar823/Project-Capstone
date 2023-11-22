@@ -172,7 +172,7 @@
                 </tr>
             </thead>
             <tbody>
-              {% for report in reports %}
+              {% for report in report_data %}
               <tr class="report-row" data-toggle="modal" data-target="#reportModal" data-report-id="{{report.id}}" data-subject="{{ report.subject }}" data-description="{{ report.description }}" data-attachment="{{ report.attachment }}" data-date-reported="{{ report.date_reported|date:'F j, Y' }}" data-time-reported="{{ report.time_reported|date:'H:i' }}" data-barangay="{{ report.barangay }}" data-respondent-name="{{ report.respondent_name }}" data-contact-number="{{ report.contact_number }}">
                   <td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                     <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
