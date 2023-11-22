@@ -123,9 +123,6 @@ def home_incident_reports(request):
     return render(request, 'home_incident_reports.html', context)
 
 def home_sit_reports(request):
-    return render(request, 'home_sit_reports.html')
-
-def home_sit_reports(request):
     subjects = ["Situational Report"]
     reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
