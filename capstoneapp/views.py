@@ -722,8 +722,20 @@ def admin_flood_reports(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+            'time_reported': report.time_reported.strftime('%H:%M'),
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
     return render(request, 'admin/admin_flood_reports.html', context)
 
