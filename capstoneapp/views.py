@@ -111,8 +111,8 @@ def home_incident_reports(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -139,8 +139,8 @@ def home_sit_reports(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -170,8 +170,8 @@ def home_typhoon_reports(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -198,8 +198,8 @@ def home_flood_reports(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -270,8 +270,8 @@ def flood(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -337,8 +337,8 @@ def incident_reports(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -366,8 +366,8 @@ def user_flood(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -394,8 +394,8 @@ def user_typhoon(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -438,8 +438,8 @@ def user_landslide(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -466,8 +466,8 @@ def user_sit(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -734,8 +734,8 @@ def admin_incident_reports(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -787,8 +787,8 @@ def admin_sit_reports(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -816,8 +816,8 @@ def admin_typhoon_reports(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -877,8 +877,8 @@ def admin_landslide_reports(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
@@ -906,8 +906,8 @@ def admin_flood_reports(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
