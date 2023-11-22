@@ -113,7 +113,10 @@ def home_incident_reports(request):
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
             'time_reported': report.time_reported,
-        })
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
+    })
 
     context = {
         'reports': reports,
@@ -141,7 +144,10 @@ def home_sit_reports(request):
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
             'time_reported': report.time_reported,
-        })
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
+    })
 
     context = {
         'reports': reports,
@@ -339,7 +345,10 @@ def incident_reports(request):
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
             'time_reported': report.time_reported,
-        })
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
+    })
 
     context = {
         'reports': reports,
@@ -468,7 +477,10 @@ def user_sit(request):
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
             'time_reported': report.time_reported,
-        })
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
+    })
 
     context = {
         'reports': reports,
@@ -736,7 +748,10 @@ def admin_incident_reports(request):
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
             'time_reported': report.time_reported,
-        })
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
+    })
 
     context = {
         'reports': reports,
@@ -789,7 +804,10 @@ def admin_sit_reports(request):
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
             'time_reported': report.time_reported,
-        })
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
+    })
 
     context = {
         'reports': reports,
