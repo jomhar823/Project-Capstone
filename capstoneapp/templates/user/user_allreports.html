@@ -458,7 +458,7 @@
                     $("#deleteReportButton").data("report-id", reportId);
 
                     if (data.attachment) {
-                        const attachmentLink = `<a href="${data.attachment}" target="_blank">${data.attachment}</a>`;
+                        const attachmentLink = `<a href="${data.attachment}" target="_blank">View Attachment</a>`;
                         $("#editAttachment").html(attachmentLink);
                     } else {
                         $("#editAttachment").empty();
