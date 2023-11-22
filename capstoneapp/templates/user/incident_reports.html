@@ -266,7 +266,11 @@
                             </tr>
                             <tr>
                               <th>ATTACHMENT</th>
-                              <td><span id="modalAttachment"></span></td>
+                              <td>
+                                <div id="modalAttachment">
+                                  <a href="{{ data.attachment }}" target="_blank">View Attachment</a>
+                                </div>
+                          </td>
                           </tr>
                           </tbody>
                           
@@ -312,7 +316,14 @@
         function updateModalContent(report) {
           $("#modalSubject").text(report.subject);
           $("#modalDescription").text(report.description);
-          $("#modalAttachment").text(report.attachment);
+          if (data.attachment) {
+              const attachmentLink = `<a href="${report.attachment}" target="_blank">${report.attachment}</a>`;
+              $("#modalAttachment").html(attachmentLink);
+          } else {
+              $("#modalAttachment").empty();
+          }
+          
+          console.log('attachment', report.attachment)
 
     
           $("#modalDateReported").text(report.date_reported);
