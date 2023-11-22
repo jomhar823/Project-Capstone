@@ -191,13 +191,7 @@
                             <!-- <a href="#" id="exportPdfButton" class="btn btn-primary">Export to PDF</a> -->
                             <label>Location</label>
                             <div id="map" style="height: 300px;"></div>
-                            <div class="form-group">
-                                <label for="editAttachment">Attachment</label>
-                                <input type="file" class="form-control-file" id="editNewAttachment" name="editNewAttachment">
-                                <div id="editAttachment">
-                                    <a href="{{ data.attachment }}" target="_blank">View Attachment</a>
-                                </div>
-                            </div>
+                            
                             <div class="mb-3" id="locationFields" style="display: none;">
                                 <input type="hidden" type="text" class="form-control" id="editLatitude" name="editLatitude" readonly>
                             </div>
@@ -334,7 +328,12 @@
                     $("#modalTimeReported").text(data.time_reported);
                     $("#modalBarangay").text(data.barangay);
                     $("#modalDescription").text(data.description);
-                    $("#modalAttachment").text(data.attachment);
+                    if (data.attachment) {
+                        const attachmentLink = `<a href="${data.attachment}" target="_blank">View Attachment</a>`;
+                        $("#editAttachment").html(attachmentLink);
+                    } else {
+                        $("#editAttachment").empty();
+                    }
 
                     var lat = data.latitude; 
                     var lng = data.longitude;
