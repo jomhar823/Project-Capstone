@@ -268,7 +268,7 @@
                               <th>ATTACHMENT</th>
                               <td>
                                 <div id="modalAttachment">
-                                  <a href="{{ data.attachment }}" target="_blank">View Attachment</a>
+                                  <a href="{{ report.attachment }}" target="_blank">View Attachment</a>
                                 </div>
                           </td>
                           </tr>
@@ -316,6 +316,7 @@
         function updateModalContent(report) {
           $("#modalSubject").text(report.subject);
           $("#modalDescription").text(report.description);
+
           if (report.attachment) {
               const attachmentLink = `<a href="${report.attachment}" target="_blank">${report.attachment}</a>`;
               $("#modalAttachment").html(attachmentLink);
