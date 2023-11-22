@@ -162,7 +162,7 @@ def home_flood_reports(request):
         'reports': reports
     }
 
-    return render(request, 'typhoon.html', context)
+    return render(request, 'flood.html', context)
 
 def earthquake(request):
     subjects = ["Earthquake Report"]
