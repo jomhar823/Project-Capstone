@@ -242,8 +242,8 @@ def landslide(request):
             'subject': report.subject,
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
         })
 
     context = {
