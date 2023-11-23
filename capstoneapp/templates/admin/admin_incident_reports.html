@@ -388,9 +388,11 @@
             barangay: $(this).data("barangay"),
             latitude: $(this).data("latitude"),
             longitude: $(this).data("longitude"),
+            respondent_name: $(this).data("respondent-name"),
+            contact_number: $(this).data("contact-number")
           };
           selectedReport = report;
-
+          console.log(report)
           openReportModal(report);
         });
     

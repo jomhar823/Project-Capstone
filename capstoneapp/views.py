@@ -751,6 +751,8 @@ def admin_incident_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'respondent_name': report.respondent_name,
+            'contact_number': report.contact_number
     })
 
     context = {
@@ -807,6 +809,8 @@ def admin_sit_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'respondent_name': report.respondent_name,
+            'contact_number': report.contact_number
     })
 
     context = {
