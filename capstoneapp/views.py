@@ -33,6 +33,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
+from django.utils import timezone
 
 # INITIAL HOMEPAGE
 
@@ -1045,7 +1046,7 @@ def new_reports(request):
 @mdrrmc_required
 @api_view(['GET'])
 def get_reports_for_today(request):
-    today = date.today()
+    today = today = timezone.now().date()
     subject_query = request.GET.get('subject')
     page = request.GET.get('page', 1)
 
