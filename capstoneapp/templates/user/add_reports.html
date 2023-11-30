@@ -45,7 +45,7 @@
               </li>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-light" href="https://www.ibaan.gov.ph/beta/index.html">Contact Us</a>
+              <a class="nav-link text-light" href="{% url 'user_contacts' %}">Contact Us</a>
             </li>
             
           </ul>
@@ -90,31 +90,36 @@
                 <div class="desc-div">
                         <select class="form-control w-100" name="subject" required>
                             <option value="" disabled selected>Subject</option>
-                            <option value="Situational Report">Situational Report</option>
+                            <!-- <option value="Situational Report">Situational Report</option> -->
                             <option value="Incident Report">Incident Report</option>
+                            <option value="Flood Report">Flood Report</option>
+                            <option value="Landslide Report">Landslide Report</option>
+                            <option value="Weather Report">Weather Report</option>
+                            <option value="Typhoon Report">Typhoon Report</option>
                             
                         </select><br>
+                      
                     <textarea name="description"class="form-control"  placeholder="Description" required ></textarea><br>
+                    <label for="date_reported">Date Reported:</label>
+                    <input type="date" class="form-control" name="date_reported" required><br>
                     <label for="attachment">Attachment:</label>
                     <input type="file" class="form-control-file" name="attachment"><br>
                 </div>
                 <div class="parent-container d-flex flex-row justify-content-between">
                     <div class="resp-brgy w-100 mr-3">
-                        <label for="barangay">Respondent Name:</label>
-                        <input type="text" class="form-control" name="respondent_name"  placeholder="Respondent Name" required><br>
-                        <label for="barangay">Barangay:</label>
-                        <input type="text" class="form-control" name="barangay" value="{{user.barangay}}" placeholder="Barangay" readonly><br>
-                        <label for="barangay">Time:</label>
-                        <input type="time" class="form-control" name="time_reported" required>
+                        <!-- <label for="barangay">Respondent Name:</label>
+                        <input type="text" class="form-control" name="respondent_name"  placeholder="Respondent Name" required><br> -->
+                        <input type="hidden" class="form-control" name="barangay" value="{{user.barangay}}" placeholder="Barangay" readonly><br>
+                        <!-- <label for="barangay">Time:</label>
+                        <input type="time" class="form-control" name="time_reported" required> -->
                     </div>
                     <div class="cont-date w-100">
-                        <label for="contact_number">Contact Number:</label>
-                        <input type="text" class="form-control" name="contact_number" maxlength="11" required><br>
-                        <label for="date_reported">Date Reported:</label>
-                        <input type="date" class="form-control" name="date_reported" required><br>
+                        <!-- <label for="contact_number">Contact Number:</label>
+                        <input type="text" class="form-control" name="contact_number" maxlength="11" required><br> -->
+                        
                     </div>
                 </div>
-                <div>
+                <div class="mb-2">
                   <label for="location">Location:</label>
                   <div id="map" style="height: 300px;"></div>
                   <input type="hidden" id="latitude" name="latitude" />
