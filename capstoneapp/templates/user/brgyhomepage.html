@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;500;700;800&family=Raleway:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-  
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   </head>
   <body>
     <header>
@@ -103,13 +104,13 @@
               </div>
             </div>
           </li>
-          <li class="dropdown">
+          <!-- <li class="dropdown">
             <a class="btn btn-custom text-light" href="{% url 'user_weather' %}" role="button"  aria-haspopup="true" aria-expanded="false">
               Weather Situation              
             </a>
             <div id="imageDropdown" class="dropdown-content">
             </div>
-          </li>
+          </li> -->
           <li class="dropdown">
             <div class="dropdown show custom-dropdown no-focus-outline">
               <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -121,7 +122,7 @@
               </div>
             </div>
           </li>
-          <li class="dropdown">
+          <!-- <li class="dropdown">
             <div class="dropdown show custom-dropdown no-focus-outline">
               <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Earthquake              
@@ -132,7 +133,7 @@
 
               </div>
             </div>
-          </li>
+          </li> -->
           <li class="dropdown">
             <div class="dropdown show custom-dropdown no-focus-outline">
               <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -151,7 +152,7 @@
                 Reports              
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{% url 'user_sit'%}" href="#">Situational Reports</a>
+                <!-- <a class="dropdown-item" href="{% url 'user_sit'%}" href="#">Situational Reports</a> -->
                 <a class="dropdown-item" href="{% url 'view-incident-reports'%}">Incident Reports</a>
                 <a class="dropdown-item" href="{% url 'get_userreports'%}">All Reports</a>
                 <a class="dropdown-item" href="{% url 'add-reports'%}">Add New Report</a>
@@ -161,147 +162,444 @@
         </ul>
       </nav>
 
-      <section class="calendar">
-        <h1 class="weather-text fw-bold">Weather in Ibaan, Batangas</h1>
-        <div id="weather-forecast" class="forecast-container">
-          {% for day in forecast %}
-              <div class="forecast-card">
-                  <div class="temp-div">
-                    <p class="temperature">{{ day.temperature }}°C</p>
-                    <h2>{{ day.date }}</h2>
-                    <p>Weather: {{ day.description }}</p>
-                  </div>
-                  <div class="image">
-                    <img src="{{ day.weatherIcon }}" alt="Weather Icon">
-                  </div>
-              </div>
-          {% endfor %}
-      </div>
+      <section class="preparedness">
+        <div class="d-flex justify-content-center align-items-center">
+            <h1 style="font-weight: 700;">BARANGAY REPORTS</h1>
+        </div>
+            <div class="select-date mb-3">
+                <div class="d-flex flex-row w-100">
+                    <div class="p-1">
+                        <input type="date" class="form-control" id="date-filter-input" name="filter-date">
+                    </div>
+                    <div class="p-1 w-50">
+                        <form id="subject-search-form" class="input-group">
+                            <input class="form-control" type="search" placeholder="Search by Subject" aria-label="Search" id="subject-search-input">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                      </svg>                                
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div>
+                    
+            </div>
+
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>SUBJECT</th>
+                    <th style="width: 20%;">DATE REPORTED</th>
+                    <th style="width: 20%;">TIME REPORTED</th>
+                    <th style="width: 20%;">BARANGAY</th>
+                </tr>
+            </thead>
+            <tbody id="all-reports-table">
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center" id="pagination">
+                <li id="previous-page" class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                <li id="next-page" class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="modal fade bd-example-modal-lg" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reportModalLabel">Edit Report</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                <th>SUBJECT</th>
+                                <td><span id="modalSubject"></span></td>
+                            </tr>
+                                <tr>
+                                    <th>DATE REPORTED</th>
+                                <td><span id="modalDateReported"></span></td>
+                            </tr>
+                                <tr>
+                                    <th>TIME REPORTED</th>
+                                <td><span id="modalTimeReported"></span></td>
+                                </tr>
+                                <tr>
+                                <th>BARANGAY</th>
+                                <td><span id="modalBarangay"></span></td>
+                                </tr>
+                            <tr>
+                                <th>DESCRIPTION</th>
+                                <td><span id="modalDescription"></span></td>
+                              </tr>
+                            <tr>
+                                <th>ATTACHMENT</th>
+                                <td><div id="editAttachment">
+                                    <a href="{{ data.attachment }}" target="_blank">View Attachment</a>
+                                </div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- <a href="#" id="exportPdfButton" class="btn btn-primary">Export to PDF</a> -->
+                            <label>Location</label>
+                            <div id="map" style="height: 300px;"></div>
+                            
+                            <div class="mb-3" id="locationFields" style="display: none;">
+                                <input type="hidden" type="text" class="form-control" id="editLatitude" name="editLatitude" readonly>
+                            </div>
+                            <div class="mb-3" id="locationFields" style="display: none;">
+                                <input type="hidden" type="text" class="form-control" id="editLongitude" name="editLongitude" readonly>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+      
       </section>
 
-      <script>
-        $(document).ready(function () {
-          $.get("{% url 'get-weather' %}", function (data) {
-              if (data.list) {
-                  var forecastContainer = $('#weather-forecast');
-                  forecastContainer.empty();
 
-                  data.list.forEach(function (dayData) {
-                      var date = new Date(dayData.dt * 1000);
-                      var temperature = dayData.main.temp;
-                      var weatherDescription = dayData.weather[0].description;
-                      var weatherIconClass  = getWeatherIconClass(dayData.weather[0].id);
-                      var hour = date.getHours();
-                      var timeOfDay = hour < 12 ? 'am' : 'pm';
-
-                      var forecastCard = $('<div class="forecast-card">');
-                      var tempDiv = $('<div class="temp-div">');
-                      var imageDiv = $('<div class="image">');
-
-                      var options = { year: 'numeric', month: 'long', day: 'numeric' };
-                      var dateFormatted = date.toLocaleDateString('en-US', options);
-                      var timeFormatted = date.toLocaleTimeString('en-US', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                      });
-                      var dateTimeString = `${dateFormatted}, ${timeFormatted}`;
-
-                      tempDiv.append($('<h3>').text(dateTimeString));
-
-                      tempDiv.append($('<h1 class="temperature">').text(temperature + '°C'));
-                      tempDiv.append($('<p>').text(weatherDescription));
-
-                      imageDiv.append($('<p>').html(`<img src="/capstoneapp/static/weather_icons_dovora_interactive/PNG/128/${weatherIconClass}.png"></img>`));
-
-                      forecastCard.append(tempDiv);
-                      forecastCard.append(imageDiv);
-
-                      forecastContainer.append(forecastCard);
-                  });
-              } else {
-                  $('#weather-forecast').text('Failed to fetch weather data.');
-              }
-          });
-      });
-
-
-      function getWeatherIconClass(weatherCode) {
-        console.log(weatherCode)
-
-        switch (weatherCode) {
-          case 200:
-          case 201:
-          case 202:
-          case 210:
-          case 211:
-          case 212:
-          case 221:
-          case 230:
-          case 231:
-          case 232:
-            return 'rain_thunder'; 
-          case 300:
-          case 301:
-          case 302:
-          case 310:
-          case 311:
-          case 312:
-          case 313:
-          case 314:
-          case 321:
-            return 'rain'; 
-          case 500:
-          case 501:
-          case 502:
-          case 503:
-          case 504:
-          case 511:
-          case 520:
-          case 521:
-          case 522:
-          case 531:
-            return 'rain'; 
-          case 600:
-          case 601:
-          case 602:
-          case 611:
-          case 612:
-          case 613:
-          case 615:
-          case 616:
-          case 620:
-          case 621:
-          case 622:
-            return 'snow'; 
-          case 701:
-          case 711:
-          case 721:
-          case 731:
-          case 741:
-          case 751:
-          case 761:
-          case 762:
-          case 771:
-          case 781:
-            return 'cloudy'; 
-          case 800:
-            return 'day_clear'; 
-          case 801:
-          case 802:
-          case 803:
-          case 804:
-            return 'cloudy'; 
-          default:
-            return 'cloudy'; 
-        }
-      }
-
-    </script>
     </main>
-    <footer>
+    <!-- <footer>
       <nav class="footer">
         <p>&copy; 2023 Disaster Risk Management</p>
       </nav>
-    </footer>
+    </footer> -->
+    <script>
+        var allBarangays = [];
+        var currentPage = 1;
+        var paginationData = null;
+        var map = null;
+
+        $(document).ready(function () {
+                
+
+                $("#filter-date").change(function () {
+                    const selectedDate = $(this).val();
+                    console.log("Filter Date Change Event - Selected Date:", selectedDate); 
+                    filterAnnouncementsByDate(selectedDate);
+                });
+
+
+                $("#next-page").click(function (e) {
+                    e.preventDefault();
+                    if (paginationData && paginationData.has_next) { 
+                        loadAllReports(paginationData.next_page_number);
+                    }
+                });
+
+                $("#previous-page").click(function (e) {
+                    e.preventDefault();
+                    if (paginationData && paginationData.has_previous) {
+                        loadAllReports(paginationData.previous_page_number);
+                    }
+                });
+
+                $(document).on("submit", "#subject-search-form", function (e) {
+                e.preventDefault();
+                const subjectQuery = $("#subject-search-input").val();
+                if (subjectQuery) {
+                    searchAnnouncementsBySubject(subjectQuery);
+                }
+            });
+
+            $("#date-filter-input").change(function () {
+                const selectedDate = $(this).val();
+                filterReportsByDate(selectedDate);
+            });
+
+
+            $("#subject-search-input").on("input", function () {
+                const subjectQuery = $(this).val();
+                searchReportsBySubject(subjectQuery);
+            });
+
+            function filterReportsByDate(selectedDate) {
+                console.log("Selected date:", selectedDate);
+                $.ajax({
+                    url: "{% url 'get_all_reports' %}",
+                    method: "GET",
+                    data: { date: selectedDate },
+                    dataType: "json",
+                    success: function (data) {
+                        updateReportsTable(data.reports, 'all-reports-table');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error filtering reports by date: " + error);
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+
+
+            function searchReportsBySubject(subjectQuery) {
+                $.ajax({
+                    url: "{% url 'get_all_reports' %}",
+                    method: "GET",
+                    data: { subject: subjectQuery },
+                    dataType: "json",
+                    success: function (data) {
+                        updateReportsTable(data.reports, 'all-reports-table');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error searching reports by subject: " + error);
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+                
+            
+        $(document).on("click", "tr[data-toggle='modal']", function () {
+                const reportId = $(this).data("report-id");
+                console.log('id', reportId)
+                displayReportDetails(reportId);
+            });
+        });
+        let marker;
+
+        function displayReportDetails(reportId) {
+            console.log("Selected report ID:", reportId);
+
+            if (!reportId) {
+                console.error("Report ID is required.");
+                return;
+            }
+
+            $.ajax({
+                url: "{% url 'get_report_details' %}",
+                method: "GET",
+                data: { report_id: reportId },
+                dataType: "json",
+                success: function (data) {
+                    $("#modalSubject").text(data.subject);
+                    $("#modalDateReported").text(data.date_reported);
+                    $("#modalTimeReported").text(data.time_reported);
+                    $("#modalBarangay").text(data.barangay);
+                    $("#modalDescription").text(data.description);
+                    if (data.attachment) {
+                        const attachmentLink = `<a href="${data.attachment}" target="_blank">View Attachment</a>`;
+                        $("#editAttachment").html(attachmentLink);
+                    } else {
+                        $("#editAttachment").empty();
+                    }
+
+                    var lat = data.latitude; 
+                    var lng = data.longitude;
+                    console.log('lat', lat)
+                    var map = L.map('map').setView([lat, lng], 13);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+                            }).addTo(map);
+
+                    var marker = L.marker([lat, lng]).addTo(map);
+                    marker.bindPopup(data.subject).openPopup();
+                    
+                    
+
+                    $('#reportModal').on('shown.bs.modal', function () {
+                        if (map !== null) {
+                        map.invalidateSize();
+                        }            
+                    });
+                    $('#reportModal').on('hidden.bs.modal', function () {
+                        if (map !== null) {
+                        map.remove();
+                        map = null;
+                        }
+                    });
+                    
+
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching report details: " + error);
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+                
+        $(document).ready(function () {
+            var paginationData = null;
+
+            function loadAllReports(page) {
+                $.ajax({
+                    url: "{% url 'get_all_reports' %}",
+                    method: "GET",
+                    data: { page: page },
+                    dataType: "json",
+                    success: function (data) {
+                        console.log("Success: Data received:", data);
+                        updateReportsTable(data.reports, 'all-reports-table');
+                        paginationData = data.pagination;
+                        generatePagination(currentPage, paginationData.total_pages);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching all reports: " + error);
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+
+            loadAllReports(currentPage);
+
+            $("#next-page").click(function (e) {
+                e.preventDefault();
+                if (paginationData && paginationData.has_next) {
+                    currentPage = paginationData.next_page_number;
+                    loadAllReports(currentPage);
+                }
+            });
+
+            $("#previous-page").click(function (e) {
+                e.preventDefault();
+                if (paginationData && paginationData.has_previous) {
+                    currentPage = paginationData.previous_page_number;
+                    loadAllReports(currentPage);
+                }
+            });
+            generatePagination(currentPage, paginationDataToday.total_pages); 
+
+            function generatePagination(page, totalPages) {
+                var pagination = $("#pagination");
+                pagination.empty();
+
+                if (totalPages <= 1) {
+                    return;
+                }
+
+                var prevPage = page - 1;
+                var nextPage = page + 1;
+
+                var prevButton = $("<li/>", { class: "page-item" });
+                var prevLink = $("<a/>", {
+                    class: "page-link",
+                    href: "#",
+                    "aria-label": "Previous",
+                }).append(
+                    $("<span/>", {
+                        ariaHidden: "true",
+                        text: "Previous",
+                    })
+                );
+                if (prevPage <= 0) {
+                    prevButton.addClass("disabled");
+                } else {
+                    prevLink.click(function () {
+                        loadAllReports(prevPage);
+                        currentPage = prevPage;
+                        generatePagination(currentPage, totalPages);
+                    });
+                }
+                prevButton.append(prevLink);
+                pagination.append(prevButton);
+
+                for (var i = 1; i <= totalPages; i++) {
+                    var pageButton = $("<li/>", { class: "page-item" });
+                    var pageLink = $("<a/>", {
+                        class: "page-link",
+                        href: "#",
+                    }).text(i);
+                    if (i === page) {
+                        pageButton.addClass("active");
+                    }
+                    pageLink.click((function (pageNumber) {
+                        return function () {
+                            loadAllReports(pageNumber);
+                            currentPage = pageNumber;
+                            generatePagination(currentPage, totalPages);
+                        };
+                    })(i));
+                    pageButton.append(pageLink);
+                    pagination.append(pageButton);
+                }
+
+                var nextButton = $("<li/>", { class: "page-item" });
+                var nextLink = $("<a/>", {
+                    class: "page-link",
+                    href: "#",
+                    "aria-label": "Next",
+                }).append(
+                    $("<span/>", {
+                        ariaHidden: "true",
+                        text: "Next",
+                    })
+                );
+                if (nextPage > totalPages) {
+                    nextButton.addClass("disabled");
+                } else {
+                    nextLink.click(function () {
+                        loadAllReports(nextPage);
+                        currentPage = nextPage;
+                        generatePagination(currentPage, totalPages);
+                    });
+                }
+                nextButton.append(nextLink);
+                pagination.append(nextButton);
+            }
+            
+        });
+
+        
+
+        function updateReportsTable(reports, tableId) {
+            console.log("Update function called for table ID:", tableId);
+            const table = $(`#${tableId}`);
+            table.empty();
+
+            if (reports.length === 0) {
+                table.append("<tr><td colspan='5'>No reports available.</td></tr>");
+            } else {
+                reports.forEach(function (report) {
+                    const formattedDate = formatDateString(report.date_reported);
+                    const formattedTime = formatTimeString(report.time_reported);
+
+                    const tableRow = `<tr data-toggle="modal" data-target="#reportModal" data-report-id="${report.id}">
+                        <td>${report.subject}</td>
+                        <td>${formattedDate}</td>
+                        <td>${formattedTime}</td>
+                        <td>${report.barangay}</td>
+                    </tr>`;
+                    table.append(tableRow);
+                });
+            }
+        }
+
+        function formatDateString(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        function formatTimeString(timeString) {
+            const options = { hour: '2-digit', minute: '2-digit' };
+            const time = new Date(`2000-01-01T${timeString}`);
+            return time.toLocaleTimeString('en-US', options);
+        }
+        
+        
+    </script>
   </body>
 </html>

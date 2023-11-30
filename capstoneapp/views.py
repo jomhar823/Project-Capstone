@@ -1081,7 +1081,7 @@ def get_reports_for_today(request):
         "pagination": pagination_data,
     })
 
-@mdrrmc_required
+
 @api_view(['GET'])
 def get_all_reports(request):
     date_param = request.GET.get('date', None)
