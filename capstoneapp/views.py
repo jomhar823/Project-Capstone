@@ -114,7 +114,6 @@ def home_incident_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
@@ -191,7 +190,7 @@ def home_typhoon_reports(request):
 
 def home_flood_reports(request):
     subjects = ["Flood Report"]
-    reports = AdminNaturalReport.objects.filter(subject__in=subjects).order_by('-date_reported')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -346,7 +345,6 @@ def incident_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
@@ -773,12 +771,10 @@ def admin_incident_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
-            'respondent_name': report.respondent_name,
-            'contact_number': report.contact_number
+
     })
 
     context = {
@@ -939,7 +935,7 @@ def admin_landslide_reports(request):
 @mdrrmc_required
 def admin_flood_reports(request):
     subjects = ["Flood Report"]
-    reports = AdminNaturalReport.objects.filter(subject__in=subjects).order_by('-date_reported')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)

@@ -181,20 +181,20 @@
                     <th></th>
                     <th>SUBJECT</th>
                     <th style="width: 20%;">DATE REPORTED</th>
-                    <th style="width: 20%;">TIME REPORTED</th>
+                    <!-- <th style="width: 20%;">TIME REPORTED</th> -->
                     <th style="width: 20%;">BARANGAY</th>
                 </tr>
             </thead>
             <tbody>
-              {% for report in report_data %}
-              <tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="{{ report.subject }}" data-description="{{ report.description }}" data-attachment="{{ report.attachment }}" data-date-reported="{{ report.date_reported|date:'F j, Y' }}" data-time-reported="{{ report.time_reported|date:'H:i' }}" data-barangay="{{ report.barangay }}" data-longitude="{{report.longitude}}" data-latitude="{{report.latitude}}">
+              {% for report in reports %}
+              <tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="{{ report.subject }}" data-description="{{ report.description }}" data-attachment="{{ report.attachment }}" data-date-reported="{{ report.date_reported|date:'F j, Y' }}" data-time-reported="{{ report.time_reported|date:'H:i' }}" data-barangay="{{ report.barangay }}" data-respondent-name="{{ report.respondent_name }}" data-contact-number="{{ report.contact_number }}" data-longitude="{{report.longitude}}" data-latitude="{{report.latitude}}">
                   <td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                     <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                     <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
                   </svg></td>
                   <td>{{ report.subject }}</td>
                   <td>{{ report.date_reported|date:'F j, Y' }}</td>
-                  <td>{{ report.time_reported|date:'H:i' }}</td>
+                  <!-- <td>{{ report.time_reported|date:'H:i' }}</td> -->
                   <td>{{ report.barangay }}</td>
               </tr>
               {% endfor %}
@@ -252,10 +252,6 @@
                                   <td><span id="modalDateReported"></span></td>
                               </tr>
                               <tr>
-                                  <th>TIME REPORTED</th>
-                                  <td><span id="modalTimeReported"></span></td>
-                              </tr>
-                              <tr>
                                   <th>BARANGAY</th>
                                   <td><span id="modalBarangay"></span></td>
                               </tr>
@@ -265,14 +261,13 @@
                             </tr>
                             <tr>
                               <th>ATTACHMENT</th>
-                              <td>
-                                <div id="modalAttachment">
-                                  <a href="{{ report.attachment }}" target="_blank">View Attachment</a>
-                                </div>
-                          </td>
+                              <td><span id="modalAttachment"></span></td>
+                          </tr>
+                          <tr>
+                            <th>LOCATION</th>
+                            <td><span id="modalLocation"></span></td>
                           </tr>
                           </tbody>
-                          
                       </table>
                       <div>
                         <label>Location</label>
@@ -315,19 +310,20 @@
         function updateModalContent(report) {
           $("#modalSubject").text(report.subject);
           $("#modalDescription").text(report.description);
-
+          $("#modalAttachment").html("");
+    
           if (report.attachment) {
-              const attachmentLink = `<a href="${report.attachment}" target="_blank">View Attachment</a>`;
-              $("#modalAttachment").html(attachmentLink);
+            var attachmentLink = $("<a>")
+              .attr("href", report.attachment)
+              .attr("target", "_blank")
+              .text("View Attachment");
+            $("#modalAttachment").append(attachmentLink);
           } else {
-              $("#modalAttachment").empty();
+            $("#modalAttachment").text("No attachment available");
           }
-          
-          console.log('attachment', report.attachment)
-
     
           $("#modalDateReported").text(report.date_reported);
-          $("#modalTimeReported").text(report.time_reported);
+          // $("#modalTimeReported").text(report.time_reported);
           $("#modalBarangay").text(report.barangay);
 
           var lat = report.latitude; 
@@ -343,6 +339,7 @@
             marker.bindPopup(report.subject).openPopup();
             
            
+            getAddressFromCoordinates(lat, lng);
 
             $('#reportModal').on('shown.bs.modal', function () {
               if (map !== null) {
@@ -368,7 +365,7 @@
             description: $(this).data("description"),
             attachment: $(this).data("attachment"),
             date_reported: $(this).data("date-reported"),
-            time_reported: $(this).data("time-reported"),
+            // time_reported: $(this).data("time-reported"),
             barangay: $(this).data("barangay"),
             latitude: $(this).data("latitude"),
             longitude: $(this).data("longitude"),
@@ -420,11 +417,11 @@
                     day: "numeric",
                   });
     
-                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date-reported="' + report.date_reported + '" data-time-reported="' + report.time_reported + '" data-barangay="' + report.barangay + '" data-longitude="' + report.longitude + '" data-latitude="' + report.latitude + '">';
+                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date-reported="' + report.date_reported + '" data-barangay="' + report.barangay + '" data-longitude="' + report.longitude + '" data-latitude="' + report.latitude + '">';
                   newRow += '<td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg></td>';
                   newRow += '<td>' + report.subject + '</td>';
                   newRow += '<td>' + formattedDate + '</td>';
-                  newRow += '<td>' + report.time_reported + '</td>';
+                  // newRow += '<td>' + report.time_reported + '</td>';
                   newRow += '<td>' + report.barangay + '</td>';
                   newRow += '</tr>';
                   $("#mainTable tbody").append(newRow);
@@ -467,11 +464,11 @@
               var data = [
                 ["Subject", selectedReport.subject],
                 ["Date Reported", selectedReport.date_reported],
-                ["Time Reported", selectedReport.time_reported],
+                // ["Time Reported", selectedReport.time_reported],
                 ["Barangay", selectedReport.barangay],
                 ["Description", selectedReport.description],
-                ["Latitude", selectedReport.latitude],
-                ["Longitude", selectedReport.longitude],
+                ["Location", $("#modalLocation").text()],
+
                 // ["Respondent Name", selectedReport.respondent_name],
                 // ["Contact Number", selectedReport.contact_number],
               ];
@@ -492,37 +489,42 @@
             });
 
             if (selectedReport.attachment) {
-            var img = new Image();
-            img.crossOrigin = 'Anonymous'; 
-            img.onload = function () {
-              var canvas = document.createElement('canvas');
-              var ctx = canvas.getContext('2d');
-              canvas.width = img.width;
-              canvas.height = img.height;
-              ctx.drawImage(img, 0, 0);
+              var img = new Image();
+              img.onload = function () {
+                var imgWidth = 100;
+                var imgHeight = (img.naturalHeight * imgWidth) / img.naturalWidth;
+                var imgX = 10;
+                var imgY = doc.autoTable.previous.finalY + 10;
+                doc.setFontSize(12);
+                doc.text('Attachment:', imgX, imgY - 1);
+                doc.addImage(img, 'PNG', imgX, imgY, imgWidth, imgHeight);
 
-              var dataURL = canvas.toDataURL('image/png');
-              var imgWidth = 100;
-              var imgHeight = (img.height * imgWidth) / img.width;
-              var imgX = 10;
-              var imgY = doc.autoTable.previous.finalY + 10;
-              doc.setFontSize(12);
-              doc.text('Attachment:', imgX, imgY - 1);
-              doc.addImage(dataURL, 'PNG', imgX, imgY, imgWidth, imgHeight);
-
-              doc.save('report.pdf');
-            };
-            img.src = selectedReport.attachment;
-          } else {
-            doc.save('report.pdf');
-          }           
-          }
+                doc.save("report.pdf");
+              };
+              img.src = selectedReport.attachment;
+            } else {
+              doc.save("report.pdf");
+            }             }
           });
       });
+      function getAddressFromCoordinates(latitude, longitude) {
+            const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
 
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const address = data.display_name;
+                    console.log('adress', address)
+                    $("#modalLocation").text(address); 
+                })
+                .catch(error => {
+                    console.error('Error fetching address:', error);
+                });
+        }
       
     
     </script>
+    
     
   
   </body>
