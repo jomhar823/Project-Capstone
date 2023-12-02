@@ -154,6 +154,7 @@
           </li>
         </ul>
       </nav>
+      
       <section class="preparedness">
         <div class="d-flex justify-content-center align-items-center">
             <h1 style="font-weight: 700;">BARANGAY REPORTS</h1>
@@ -244,11 +245,17 @@
                                 <td><span id="modalDescription"></span></td>
                               </tr>
                             <tr>
-                                <th>ATTACHMENT</th>
-                                <td><div id="editAttachment">
+                              <th>ATTACHMENT</th>
+                              <td><div id="editAttachment">
                                     <a href="{{ data.attachment }}" target="_blank">View Attachment</a>
-                                </div></td>
-                                    </tr>
+                                  </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>LOCATION</th>
+                              <td><span id="modalLocation"></span></td>
+                            </tr>
+
                                 </tbody>
                             </table>
                             <!-- <a href="#" id="exportPdfButton" class="btn btn-primary">Export to PDF</a> -->
@@ -378,7 +385,7 @@
                   description: $(this).data("description"),
                   attachment: $(this).data("attachment"),
                   date_reported: $(this).data("date-reported"),
-                  time_reported: $(this).data("time-reported"),
+                  // time_reported: $(this).data("time-reported"),
                 };
                 selectedReport = report;
                 console.log('selected report', selectedReport)
@@ -403,7 +410,7 @@
                   ["Subject", selectedReport.subject],
                   ["Date Reported", formattedDate],
                   ["Description", selectedReport.description],
-                  
+                  ["Location", $("#modalLocation").text()],
                 ];
 
                 var columnWidths = [50, 100]; 
@@ -491,8 +498,9 @@
                     var marker = L.marker([lat, lng]).addTo(map);
                     marker.bindPopup(data.subject).openPopup();
                     
-                    
+                    getAddressFromCoordinates(lat, lng);
 
+                            
                     $('#reportModal').on('shown.bs.modal', function () {
                         if (map !== null) {
                         map.invalidateSize();
@@ -670,7 +678,20 @@
             const time = new Date(`2000-01-01T${timeString}`);
             return time.toLocaleTimeString('en-US', options);
         }
-        
+        function getAddressFromCoordinates(latitude, longitude) {
+            const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const address = data.display_name;
+                    console.log('adress', address)
+                    $("#modalLocation").text(address); 
+                })
+                .catch(error => {
+                    console.error('Error fetching address:', error);
+                });
+        }
         
     </script>
   </body>
