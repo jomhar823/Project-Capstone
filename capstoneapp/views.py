@@ -34,7 +34,7 @@ from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.utils import timezone
-
+from vonage import Client, Sms
 # INITIAL HOMEPAGE
 
 def index(request):
@@ -570,6 +570,21 @@ def delete_report(request, report_id):
 def user_weather(request):
     return render(request, 'user/user_weather.html')
 
+def send_sms(to_phone_number, notification_message):
+    client = Client(key="ffa9012f", secret="jDYSd6lCQ7t2xdVb")
+    sms = Sms(client)
+
+    response = sms.send_message({
+        'from': "MDRRMC Ibaan Reports",
+        'to': to_phone_number,
+        'text': notification_message,
+    })
+
+    if response['messages'][0]['status'] == '0':
+        print("Message sent successfully.")
+    else:
+        print(f"Message failed with error: {response['messages'][0]['error-text']}")
+
 def submit_report(request):
     if request.method == 'POST':
         serializer = ReportSerializer(data=request.POST)
@@ -591,6 +606,15 @@ def submit_report(request):
             email.attach_alternative(html_content, "text/html")
 
             email.send()
+
+            barangay = report.barangay  
+            subject_details = report.subject
+            date_reported = report.date_reported
+            description = report.description
+
+            to_phone_number = '639184240316'
+            notification_message = f'A new report has been submitted by Barangay {barangay}.\n\nBarangay: {barangay}\nSubject: {subject_details}\nDate: {date_reported}\nDescription: {description}'
+            send_sms(to_phone_number, notification_message)
 
             return redirect('add-reports')  
         else:
