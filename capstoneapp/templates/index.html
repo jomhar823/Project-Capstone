@@ -188,7 +188,7 @@
                 <tr>
                     <th>SUBJECT</th>
                     <th style="width: 20%;">DATE REPORTED</th>
-                    <th style="width: 20%;">TIME REPORTED</th>
+                    <!-- <th style="width: 20%;">TIME REPORTED</th> -->
                     <th style="width: 20%;">BARANGAY</th>
                 </tr>
             </thead>
@@ -231,10 +231,10 @@
                                     <th>DATE REPORTED</th>
                                 <td><span id="modalDateReported"></span></td>
                             </tr>
-                                <tr>
+                                <!-- <tr>
                                     <th>TIME REPORTED</th>
                                 <td><span id="modalTimeReported"></span></td>
-                                </tr>
+                                </tr> -->
                                 <tr>
                                 <th>BARANGAY</th>
                                 <td><span id="modalBarangay"></span></td>
@@ -264,7 +264,10 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
+                        <button id="exportPdfButton" class="btn btn-danger mb-2"><svg class="mb-1 mr-3" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-pdf-fill" viewBox="0 0 16 16">
+                          <path d="M5.523 12.424c.14-.082.293-.162.459-.238a7.878 7.878 0 0 1-.45.606c-.28.337-.498.516-.635.572a.266.266 0 0 1-.035.012.282.282 0 0 1-.026-.044c-.056-.11-.054-.216.04-.36.106-.165.319-.354.647-.548zm2.455-1.647c-.119.025-.237.05-.356.078a21.148 21.148 0 0 0 .5-1.05 12.045 12.045 0 0 0 .51.858c-.217.032-.436.07-.654.114zm2.525.939a3.881 3.881 0 0 1-.435-.41c.228.005.434.022.612.054.317.057.466.147.518.209a.095.095 0 0 1 .026.064.436.436 0 0 1-.06.2.307.307 0 0 1-.094.124.107.107 0 0 1-.069.015c-.09-.003-.258-.066-.498-.256zM8.278 6.97c-.04.244-.108.524-.2.829a4.86 4.86 0 0 1-.089-.346c-.076-.353-.087-.63-.046-.822.038-.177.11-.248.196-.283a.517.517 0 0 1 .145-.04c.013.03.028.092.032.198.005.122-.007.277-.038.465z"/>
+                          <path fill-rule="evenodd" d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.165 13.668c.09.18.23.343.438.419.207.075.412.04.58-.03.318-.13.635-.436.926-.786.333-.401.683-.927 1.021-1.51a11.651 11.651 0 0 1 1.997-.406c.3.383.61.713.91.95.28.22.603.403.934.417a.856.856 0 0 0 .51-.138c.155-.101.27-.247.354-.416.09-.181.145-.37.138-.563a.844.844 0 0 0-.2-.518c-.226-.27-.596-.4-.96-.465a5.76 5.76 0 0 0-1.335-.05 10.954 10.954 0 0 1-.98-1.686c.25-.66.437-1.284.52-1.794.036-.218.055-.426.048-.614a1.238 1.238 0 0 0-.127-.538.7.7 0 0 0-.477-.365c-.202-.043-.41 0-.601.077-.377.15-.576.47-.651.823-.073.34-.04.736.046 1.136.088.406.238.848.43 1.295a19.697 19.697 0 0 1-1.062 2.227 7.662 7.662 0 0 0-1.482.645c-.37.22-.699.48-.897.787-.21.326-.275.714-.08 1.103z"/>
+                        </svg>Export to PDF</button>
 
                     </div>
                 </div>
@@ -280,6 +283,8 @@
         <p>&copy; 2023 Disaster Risk Management</p>
       </nav>
     </footer> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.16/jspdf.plugin.autotable.min.js"></script>
     <script>
         var allBarangays = [];
         var currentPage = 1;
@@ -287,7 +292,10 @@
         var map = null;
 
         $(document).ready(function () {
-                
+                window.jsPDF = window.jspdf.jsPDF;
+
+                var modalData = null;
+                var selectedReport = null;
 
                 $("#filter-date").change(function () {
                     const selectedDate = $(this).val();
@@ -363,13 +371,85 @@
                 });
             }
                 
-            
         $(document).on("click", "tr[data-toggle='modal']", function () {
                 const reportId = $(this).data("report-id");
-                console.log('id', reportId)
+                var report = {
+                  subject: $(this).data("subject"),
+                  description: $(this).data("description"),
+                  attachment: $(this).data("attachment"),
+                  date_reported: $(this).data("date-reported"),
+                  time_reported: $(this).data("time-reported"),
+                };
+                selectedReport = report;
+                console.log('selected report', selectedReport)
                 displayReportDetails(reportId);
             });
+            $("#exportPdfButton").on("click", function () {
+              if (selectedReport) {
+                var doc = new jsPDF();
+                var logoUrl = "{% static 'capstoneapp/ibaanlogo1.png' %}";
+                doc.addImage(logoUrl, 'PNG', 10, 10, 30, 30);
+
+                var headerText = selectedReport.subject;
+                doc.setFontSize(18);
+                var textWidth = doc.getStringUnitWidth(headerText) * doc.internal.getFontSize();
+                var pageWidth = doc.internal.pageSize.width;
+                var textX = (pageWidth - textWidth) / 2;
+                doc.text(headerText, pageWidth / 2, 20, 'center'); 
+                const formattedDate = formatDateString(selectedReport.date_reported);
+
+                var columns = ["Field", "Details"];
+                var data = [
+                  ["Subject", selectedReport.subject],
+                  ["Date Reported", formattedDate],
+                  ["Description", selectedReport.description],
+                  
+                ];
+
+                var columnWidths = [50, 100]; 
+                var columnStyles = {
+                  0: { cellWidth: 50, halign: "left" },
+                  1: { cellWidth: 130, halign: "left" },
+                };
+
+                doc.autoTable({
+                  head: [columns],
+                  body: data,
+                  theme: "striped",
+                  columnStyles: columnStyles,
+                  margin: { top: 50 },              
+                
+              });
+              if (selectedReport.attachment) {
+                var img = new Image();
+                img.crossOrigin = 'Anonymous'; 
+                img.onload = function () {
+                  var canvas = document.createElement('canvas');
+                  var ctx = canvas.getContext('2d');
+                  canvas.width = img.width;
+                  canvas.height = img.height;
+                  ctx.drawImage(img, 0, 0);
+
+                  var dataURL = canvas.toDataURL('image/png');
+                  var imgWidth = 100;
+                  var imgHeight = (img.height * imgWidth) / img.width;
+                  var imgX = 10;
+                  var imgY = doc.autoTable.previous.finalY + 10;
+                  doc.setFontSize(12);
+                  doc.text('Attachment:', imgX, imgY - 1);
+                  doc.addImage(dataURL, 'PNG', imgX, imgY, imgWidth, imgHeight);
+
+                  doc.save('report.pdf');
+                };
+                img.src = selectedReport.attachment;
+              } else {
+                doc.save('report.pdf');
+              }
+
+              }
+            });
         });
+        
         let marker;
 
         function displayReportDetails(reportId) {
@@ -386,9 +466,10 @@
                 data: { report_id: reportId },
                 dataType: "json",
                 success: function (data) {
+                  const formattedDate = formatDateString(data.date_reported);
+
                     $("#modalSubject").text(data.subject);
-                    $("#modalDateReported").text(data.date_reported);
-                    $("#modalTimeReported").text(data.time_reported);
+                    $("#modalDateReported").text(formattedDate);
                     $("#modalBarangay").text(data.barangay);
                     $("#modalDescription").text(data.description);
                     if (data.attachment) {
@@ -432,7 +513,7 @@
                 }
             });
         }
-                
+        
         $(document).ready(function () {
             var paginationData = null;
 
@@ -568,10 +649,9 @@
                     const formattedDate = formatDateString(report.date_reported);
                     const formattedTime = formatTimeString(report.time_reported);
 
-                    const tableRow = `<tr data-toggle="modal" data-target="#reportModal" data-report-id="${report.id}">
+                    const tableRow = `<tr data-toggle="modal" data-target="#reportModal" data-report-id="${report.id}" data-subject="${report.subject}" data-description="${report.description}" data-attachment="${report.attachment}" data-date-reported="${report.date_reported}">
                         <td>${report.subject}</td>
                         <td>${formattedDate}</td>
-                        <td>${formattedTime}</td>
                         <td>${report.barangay}</td>
                     </tr>`;
                     table.append(tableRow);
