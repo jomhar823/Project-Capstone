@@ -49,16 +49,21 @@ class Report(models.Model):
     SUBJECT_CHOICES = (
         ('Situational Report', 'Situational Report'),
         ('Incident Report', 'Incident Report'),
+        ('Flood Report', 'Flood Report'),
+        ('Earthquake Report', 'Earthquake Report'),
+        ('Landslide Report', 'Landslide Report'),
+        ('Weather Report', 'Weather Report'),
+        ('Typhoon Report', 'Typhoon Report'),
     )
 
     subject = models.CharField(max_length=50, choices=SUBJECT_CHOICES)
     description = models.TextField()
     attachment = models.FileField(upload_to='report_attachments/', blank=True, null=True)
-    respondent_name = models.CharField(max_length=255)
+    # respondent_name = models.CharField(max_length=255)
     barangay = models.CharField(max_length=255)
-    contact_number = models.CharField(max_length=20)
+    # contact_number = models.CharField(max_length=20)
     date_reported = models.DateField()
-    time_reported = models.TimeField()
+    # time_reported = models.TimeField()
     latitude = models.DecimalField(max_digits=20, decimal_places=15, blank=True, null=True)
     longitude = models.DecimalField(max_digits=20, decimal_places=15, blank=True, null=True)
 

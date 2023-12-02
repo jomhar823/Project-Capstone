@@ -167,7 +167,6 @@ OPENWEATHERMAP_API_KEY = '074b9e9f93888d463d148580ff82b8dd'
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
-    ".vercel.app",
     "https://capstone-mdrrmc.vercel.app"
 ]
 CORS_ALLOW_ALL_ORIGINS = True
