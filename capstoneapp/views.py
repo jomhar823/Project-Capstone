@@ -525,7 +525,7 @@ def user_allreports(request):
         if subject_param:
             reports = reports.filter(subject__icontains=subject_param)
 
-        reports = reports.order_by('-date_reported', '-time_reported')
+        reports = reports.order_by('-date_reported')
 
         items_per_page = 10
 
