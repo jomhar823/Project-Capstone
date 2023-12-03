@@ -182,19 +182,19 @@
                     <th></th>
                     <th>SUBJECT</th>
                     <th style="width: 20%;">DATE REPORTED</th>
-                    <th style="width: 20%;">TIME REPORTED</th>
+                    <th style="width: 20%;">BARANGAY</th>
                 </tr>
             </thead>
             <tbody>
               {% for report in report_data %}
-              <tr class="report-row" data-toggle="modal" data-target="#reportModal" data-report-id="{{report.id}}" data-subject="{{ report.subject }}" data-description="{{ report.description }}" data-attachment="{{ report.attachment }}" data-date-reported="{{ report.date_reported|date:'F j, Y' }}" data-time-reported="{{ report.time_reported|date:'H:i' }}" data-barangay="{{ report.barangay }}" data-respondent-name="{{ report.respondent_name }}" data-contact-number="{{ report.contact_number }}">
-                  <td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+              <tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="{{ report.subject }}" data-description="{{ report.description }}" data-attachment="{{ report.attachment }}" data-date-reported="{{ report.date_reported|date:'F j, Y' }}" data-time-reported="{{ report.time_reported|date:'H:i' }}" data-barangay="{{ report.barangay }}" data-respondent-name="{{ report.respondent_name }}" data-contact-number="{{ report.contact_number }}" data-longitude="{{report.longitude}}" data-latitude="{{report.latitude}}">
+                <td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                     <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                     <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
                   </svg></td>
                   <td>{{ report.subject }}</td>
                   <td>{{ report.date_reported|date:'F j, Y' }}</td>
-                  <td>{{ report.time_reported|date:'H:i' }}</td>
+                  <td>{{ report.barangay }}</td>
               </tr>
               {% endfor %}
           </tbody>
@@ -250,16 +250,19 @@
                                   <th>DATE REPORTED</th>
                                   <td><span id="modalDateReported"></span></td>
                               </tr>
-                              <tr>
+                              <!-- <tr>
                                   <th>TIME REPORTED</th>
                                   <td><span id="modalTimeReported"></span></td>
-                              </tr>
+                              </tr> -->
                              
                               <tr>
                                 <th>DESCRIPTION</th>
                                 <td><span id="modalDescription"></span></td>
                             </tr>
-                            
+                            <tr>
+                              <th>LOCATION</th>
+                              <td><span id="modalLocation"></span></td>
+                            </tr>
                             
                             <tr>
                               <th>ATTACHMENT</th>
@@ -267,7 +270,15 @@
                           </tr>
                           </tbody>
                       </table>
-
+                      <label>Location</label>
+                      <div id="map" style="height: 300px;"></div>
+                      
+                      <div class="mb-3" id="locationFields" style="display: none;">
+                          <input type="hidden" type="text" class="form-control" id="editLatitude" name="editLatitude" readonly>
+                      </div>
+                      <div class="mb-3" id="locationFields" style="display: none;">
+                          <input type="hidden" type="text" class="form-control" id="editLongitude" name="editLongitude" readonly>
+                      </div>
                   </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -293,13 +304,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.16/jspdf.plugin.autotable.min.js"></script>
     
     <script>
+      var map = null;
       $(document).ready(function () {
         window.jsPDF = window.jspdf.jsPDF;
 
         var modalData = null;
         var selectedReport = null;
+        let marker;
     
         function updateModalContent(report) {
+          const formattedDate = formatDateString(report.date_reported);
+
           $("#modalSubject").text(report.subject);
           $("#modalDescription").text(report.description);
           $("#modalAttachment").html("");
@@ -314,9 +329,35 @@
             $("#modalAttachment").text("No attachment available");
           }
     
-          $("#modalDateReported").text(report.date_reported);
+          $("#modalDateReported").text(formattedDate);
           $("#modalTimeReported").text(report.time_reported);
+
+          var lat = report.latitude; 
+          var lng = report.longitude;
+          console.log('lat', lat)
+          var map = L.map('map').setView([lat, lng], 13);
+
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                      attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+                  }).addTo(map);
+
+          var marker = L.marker([lat, lng]).addTo(map);
+          marker.bindPopup(report.subject).openPopup();
           
+          getAddressFromCoordinates(lat, lng);
+
+                  
+          $('#reportModal').on('shown.bs.modal', function () {
+              if (map !== null) {
+              map.invalidateSize();
+              }            
+          });
+          $('#reportModal').on('hidden.bs.modal', function () {
+              if (map !== null) {
+              map.remove();
+              map = null;
+              }
+          });
         }
     
         function openReportModal(reportData) {
@@ -331,9 +372,9 @@
             attachment: $(this).data("attachment"),
             date_reported: $(this).data("date-reported"),
             time_reported: $(this).data("time-reported"),
-           
+            latitude: $(this).data("latitude"),
+            longitude: $(this).data("longitude"),
           };
-          console.log('report', report)
           selectedReport = report;
 
           openReportModal(report);
@@ -381,11 +422,11 @@
                     day: "numeric",
                   });
     
-                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal"  data-report-id="{{report.id}}" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date-reported="' + report.date_reported + '" data-time-reported="' + report.time_reported + '" data-barangay="' + report.barangay + '">';
+                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date-reported="' + report.date_reported + '" data-time-reported="' + report.time_reported + '" data-barangay="' + report.barangay + '" data-respondent="' + report.respondent_name + '" data-contact="' + report.contact_number + '" data-longitude="' + report.longitude + '" data-latitude="' + report.latitude + '">';
                   newRow += '<td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg></td>';
                   newRow += '<td>' + report.subject + '</td>';
                   newRow += '<td>' + formattedDate + '</td>';
-                  newRow += '<td>' + report.time_reported + '</td>';
+                  newRow += '<td>' + report.barangay + '</td>';
                   newRow += '</tr>';
                   $("#mainTable tbody").append(newRow);
                 }
@@ -422,14 +463,15 @@
             var pageWidth = doc.internal.pageSize.width;
             var textX = (pageWidth - textWidth) / 2;
             doc.text(headerText, pageWidth / 2, 20, 'center'); 
+            const formattedDate = formatDateString(selectedReport.date_reported);
 
             var columns = ["Field", "Details"];
             var data = [
               ["Subject", selectedReport.subject],
-              ["Date Reported", selectedReport.date_reported],
-              ["Time Reported", selectedReport.time_reported],
+              ["Date Reported", formattedDate],
+              ["Barangay", selectedReport.barangay],
               ["Description", selectedReport.description],
-              
+              ["Location", $("#modalLocation").text()],
             ];
 
             var columnWidths = [50, 100]; 
@@ -475,7 +517,25 @@
           }
         });
       });
+      function getAddressFromCoordinates(latitude, longitude) {
+            const apiUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
 
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const address = data.display_name;
+                    console.log('adress', address)
+                    $("#modalLocation").text(address); 
+                })
+                .catch(error => {
+                    console.error('Error fetching address:', error);
+                });
+        }
+        function formatDateString(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', options);
+        }
       
     
     </script>

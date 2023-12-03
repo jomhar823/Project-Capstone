@@ -162,7 +162,7 @@ def home_typhoon_reports(request):
 
 def home_typhoon_reports(request):
     subjects = ["Typhoon Report"]
-    reports = AdminNaturalReport.objects.filter(subject__in=subjects).order_by('-date_reported')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -178,6 +178,9 @@ def home_typhoon_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
         })
 
     context = {
@@ -205,6 +208,9 @@ def home_flood_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
         })
 
     context = {
@@ -232,7 +238,7 @@ def earthquake(request):
 
 def landslide(request):
     subjects = ["Landslide Report"]
-    reports = AdminNaturalReport.objects.filter(subject__in=subjects).order_by('-date_reported')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -248,6 +254,9 @@ def landslide(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
         })
 
     context = {
@@ -259,7 +268,7 @@ def landslide(request):
 
 def flood(request):
     subjects = ["Flood Report"]
-    reports = AdminNaturalReport.objects.filter(subject__in=subjects).order_by('-date_reported')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -275,6 +284,9 @@ def flood(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
         })
 
     context = {
@@ -356,7 +368,7 @@ def incident_reports(request):
 
 def user_flood(request):
     subjects = ["Flood Report"]
-    reports = AdminNaturalReport.objects.filter(subject__in=subjects).order_by('-date_reported')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -372,6 +384,9 @@ def user_flood(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
         })
 
     context = {
@@ -383,7 +398,7 @@ def user_flood(request):
 
 def user_typhoon(request):
     subjects = ["Typhoon Report"]
-    reports = AdminNaturalReport.objects.filter(subject__in=subjects).order_by('-date_reported')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -399,6 +414,9 @@ def user_typhoon(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
         })
 
     context = {
@@ -426,7 +444,7 @@ def user_earthquake(request):
 
 def user_landslide(request):
     subjects = ["Landslide Report"]
-    reports = AdminNaturalReport.objects.filter(subject__in=subjects).order_by('-date_reported')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -442,6 +460,9 @@ def user_landslide(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
         })
 
     context = {
@@ -838,7 +859,7 @@ def admin_sit_reports(request):
 @mdrrmc_required
 def admin_typhoon_reports(request):
     subjects = ["Typhoon Report"]
-    reports = AdminNaturalReport.objects.filter(subject__in=subjects).order_by('-date_reported')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -854,6 +875,9 @@ def admin_typhoon_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
         })
 
     context = {
@@ -898,7 +922,7 @@ def admin_earthquake_reports(request):
 @mdrrmc_required
 def admin_landslide_reports(request):
     subjects = ["Landslide Report"]
-    reports = AdminNaturalReport.objects.filter(subject__in=subjects).order_by('-date_reported')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -914,6 +938,9 @@ def admin_landslide_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
         })
 
     context = {
@@ -942,6 +969,9 @@ def admin_flood_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
         })
 
     context = {
@@ -1246,7 +1276,7 @@ def get_filtered_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',
             'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            # 'time_reported': report.time_reported.strftime('%H:%M'),
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude
@@ -1283,7 +1313,7 @@ def get_filtered_reports_sit(request):
 def get_filtered_reports_flood(request):
     selected_date = request.GET.get('date')
 
-    reports = AdminNaturalReport.objects.filter(date_reported=selected_date, subject='Flood Report')
+    reports = Report.objects.filter(date_reported=selected_date, subject='Flood Report')
     
     report_data = []
     for report in reports:
@@ -1293,7 +1323,9 @@ def get_filtered_reports_flood(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',
             'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude
         })
 
     return JsonResponse(report_data, safe=False)
@@ -1301,7 +1333,7 @@ def get_filtered_reports_flood(request):
 def get_filtered_reports_typhoon(request):
     selected_date = request.GET.get('date')
 
-    reports = AdminNaturalReport.objects.filter(date_reported=selected_date, subject='Typhoon Report')
+    reports = Report.objects.filter(date_reported=selected_date, subject='Typhoon Report')
     
     report_data = []
     for report in reports:
@@ -1311,7 +1343,9 @@ def get_filtered_reports_typhoon(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',
             'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude
         })
 
     return JsonResponse(report_data, safe=False)
@@ -1336,7 +1370,7 @@ def get_filtered_reports_earthquake(request):
 def get_filtered_reports_landslide(request):
     selected_date = request.GET.get('date')
 
-    reports = AdminNaturalReport.objects.filter(date_reported=selected_date, subject='Landslide Report')
+    reports = Report.objects.filter(date_reported=selected_date, subject='Landslide Report')
     
     report_data = []
     for report in reports:
@@ -1346,7 +1380,9 @@ def get_filtered_reports_landslide(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',
             'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'time_reported': report.time_reported.strftime('%H:%M'),
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude
         })
 
     return JsonResponse(report_data, safe=False)

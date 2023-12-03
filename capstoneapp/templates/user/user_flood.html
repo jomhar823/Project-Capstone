@@ -180,7 +180,7 @@
                 </tr>
             </thead>
             <tbody>
-              {% for report in reports %}
+              {% for report in report_data %}
               <tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="{{ report.subject }}" data-description="{{ report.description }}" data-attachment="{{ report.attachment }}" data-date-reported="{{ report.date_reported|date:'F j, Y' }}" data-time-reported="{{ report.time_reported|date:'H:i' }}" data-barangay="{{ report.barangay }}" data-respondent-name="{{ report.respondent_name }}" data-contact-number="{{ report.contact_number }}" data-longitude="{{report.longitude}}" data-latitude="{{report.latitude}}">
                   <td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                     <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
@@ -304,6 +304,8 @@
         var selectedReport = null;
         let marker;
         function updateModalContent(report) {
+          const formattedDate = formatDateString(report.date_reported);
+
           $("#modalSubject").text(report.subject);
           $("#modalDescription").text(report.description);
           $("#modalAttachment").html("");
@@ -318,7 +320,7 @@
             $("#modalAttachment").text("No attachment available");
           }
     
-          $("#modalDateReported").text(report.date_reported);
+          $("#modalDateReported").text(formattedDate);
           $("#modalTimeReported").text(report.time_reported);
 
           var lat = report.latitude; 
@@ -409,11 +411,11 @@
                     day: "numeric",
                   });
     
-                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date-reported="' + report.date_reported + '" data-time-reported="' + report.time_reported + '" data-barangay="' + report.barangay + '" data-respondent="' + report.respondent_name + '" data-contact="' + report.contact_number + '">';
+                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date-reported="' + report.date_reported + '" data-time-reported="' + report.time_reported + '" data-barangay="' + report.barangay + '" data-respondent="' + report.respondent_name + '" data-contact="' + report.contact_number + '" data-longitude="' + report.longitude + '" data-latitude="' + report.latitude + '">';
                   newRow += '<td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg></td>';
                   newRow += '<td>' + report.subject + '</td>';
                   newRow += '<td>' + formattedDate + '</td>';
-                  newRow += '<td>' + report.time_reported + '</td>';
+                  newRow += '<td>' + report.barangay + '</td>';
                   
                   newRow += '</tr>';
                   $("#mainTable tbody").append(newRow);
@@ -451,16 +453,15 @@
             var pageWidth = doc.internal.pageSize.width;
             var textX = (pageWidth - textWidth) / 2;
             doc.text(headerText, pageWidth / 2, 20, 'center'); 
+            const formattedDate = formatDateString(selectedReport.date_reported);
 
             var columns = ["Field", "Details"];
             var data = [
               ["Subject", selectedReport.subject],
-              ["Date Reported", selectedReport.date_reported],
-              // ["Time Reported", selectedReport.time_reported],
+              ["Date Reported", formattedDate],
+              ["Barangay", selectedReport.barangay],
               ["Description", selectedReport.description],
               ["Location", $("#modalLocation").text()],
-
-              
             ];
 
             var columnWidths = [50, 100]; 
@@ -520,6 +521,11 @@
                 .catch(error => {
                     console.error('Error fetching address:', error);
                 });
+        }
+        function formatDateString(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', options);
         }
     </script>
     
