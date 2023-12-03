@@ -178,7 +178,6 @@ def home_typhoon_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
         })
 
     context = {
@@ -206,7 +205,6 @@ def home_flood_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
         })
 
     context = {
@@ -250,7 +248,6 @@ def landslide(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
         })
 
     context = {
@@ -278,7 +275,6 @@ def flood(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
         })
 
     context = {
@@ -376,7 +372,6 @@ def user_flood(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
         })
 
     context = {
@@ -404,7 +399,6 @@ def user_typhoon(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
         })
 
     context = {
@@ -448,7 +442,6 @@ def user_landslide(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
         })
 
     context = {
@@ -861,7 +854,6 @@ def admin_typhoon_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
         })
 
     context = {
@@ -922,7 +914,6 @@ def admin_landslide_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
         })
 
     context = {
@@ -951,7 +942,6 @@ def admin_flood_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
-            'time_reported': report.time_reported,
         })
 
     context = {
