@@ -1,3 +1,5 @@
+{% extends 'user/header.html' %}
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -15,148 +17,10 @@
 
   </head>
   <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light ">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarText">
-              <ul class="navbar-nav mr-auto align-items-center">
-                <li class="nav-item active">
-                  <a class="nav-link text-light gov-link" href="https://www.gov.ph/">GOV PH</a>
-                </li>
-                <li class="nav-item active">
-                    <li class="dropdown">
-                        <div class="dropdown show custom-dropdown no-focus-outline">
-                          <a class="btn btn-custom text-light" href="{% url 'brgyhomepage' %}" role="button" aria-haspopup="true" aria-expanded="false">
-                           Home          
-                          </a>
-                        </div>
-                      </li>
-                </li>
-                <li class="nav-item">
-                  <li class="dropdown">
-                    <div class="dropdown show custom-dropdown no-focus-outline">
-                      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        About Us          
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'missionvision' %}">Mission and Vision</a>
-                        <a class="dropdown-item" href="{% url 'barangays' %}" href="#">Barangays</a>
-                      </div>
-                    </div>
-                  </li>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link text-light" href="https://www.ibaan.gov.ph/beta/index.html">Contact Us</a>
-                </li>
-                
-              </ul>
-    
-              <span class="navbar-text ">
-                <li class="dropdown">
-                  <div class="dropdown show custom-dropdown no-focus-outline">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" v style="vertical-align: middle;"iewBox="0 0 16 16">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                      </svg> {{user.barangay}}           
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <a class="dropdown-item" href="{% url 'logout' %}" href="#">Logout</a>
-                    </div>
-                  </div>
-                </li>
-              </span>
-            </div>
-    
-          </nav>
-    </header>
+    {% block content %}
+
     <main>
-      <section class="hero">
-        <div class="hero-content">
-          <h1>LANDSLIDE REPORTS</h1>
-          <p>Preparing for a safer future.</p>
-        </div>
-      </section>
-      <nav class="navigation-bar">
-        <ul class="nav-list">
-          <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-custom text-light" href="{% url 'get_user_announcements' %}" role="button" aria-haspopup="true" aria-expanded="false">
-                Announcement              
-              </a>
-              
-            </div>
-          </li>
-          <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Flood              
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{% url 'user_flood' %}" href="#">Flood Reports</a>
-                <a class="dropdown-item" href="{% url 'userflood_basics' %}">Flood Basics</a>
-              </div>
-            </div>
-          </li>
-          <!-- <li class="dropdown">
-            <a class="btn btn-custom text-light" href="{% url 'user_weather' %}" role="button"  aria-haspopup="true" aria-expanded="false">
-              Weather Situation              
-            </a>
-            <div id="imageDropdown" class="dropdown-content">
-            </div>
-          </li> -->
-          <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Typhoon              
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{% url 'user_typhoon' %}" href="#">Typhoon Reports</a>
-                <a class="dropdown-item" href="{% url 'usertyphoon_basics' %}">Typhoon Basics</a>
-              </div>
-            </div>
-          </li>
-          <!-- <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Earthquake              
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{% url 'user_earthquake' %}" href="#">Earthquake Reports</a>
-                <a class="dropdown-item" href="{% url 'userearthquake_basics' %}">Earthquake Basics</a>
-
-              </div>
-            </div>
-          </li> -->
-          <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Landslide              
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{% url 'user_landslide' %}">Landslide Reports</a>
-                <a class="dropdown-item" href="{% url 'userlandslide_basics' %}">Landslide Basics</a>
-              </div>
-            </div>
-          </li>
-
-          <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Reports              
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <!-- <a class="dropdown-item" href="{% url 'user_sit'%}" href="#">Situational Reports</a> -->
-                <a class="dropdown-item" href="{% url 'view-incident-reports'%}">Incident Reports</a>
-                <a class="dropdown-item" href="{% url 'get_userreports'%}">All Reports</a>
-                <a class="dropdown-item" href="{% url 'add-reports'%}">Add New Report</a>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </nav>
+      
       <section class="preparedness">
         <h2>Landslide Reports</h2>
           <div class="filter-section d-flex justify-content-between align-items-center mb-4 mt-3">
@@ -446,15 +310,28 @@
         $("#exportPdfButton").on("click", function () {
           if (selectedReport) {
             var doc = new jsPDF();
-            var logoUrl = "{% static 'capstoneapp/ibaanlogo1.png' %}";
-            doc.addImage(logoUrl, 'PNG', 10, 10, 30, 30);
+            var logos = [
+                "{% static 'capstoneapp/ibaanlogo1.png' %}",
+                "{% static 'capstoneapp/ibaanlogo2.png' %}",
 
-            var headerText = selectedReport.subject;
-            doc.setFontSize(18);
+            ]
+            var logoWidth = 20;
+            var centerX = doc.internal.pageSize.width / 2 - (logoWidth * 2) / 2;
+            var startY = 20;
+
+            logos.forEach(function (logo, index) {
+                doc.addImage(logo, 'PNG', centerX + index * logoWidth, startY, logoWidth, logoWidth);
+            });
+
+            var headerText = "MUNICIPAL DISASTER RISK REDUCTION AND MANAGEMENT OFFICE";
+            doc.setFontSize(15);
             var textWidth = doc.getStringUnitWidth(headerText) * doc.internal.getFontSize();
             var pageWidth = doc.internal.pageSize.width;
             var textX = (pageWidth - textWidth) / 2;
-            doc.text(headerText, pageWidth / 2, 20, 'center'); 
+            var headerY = startY + logoWidth + 7; 
+            doc.setFont(undefined, 'bold');
+            doc.text(headerText, pageWidth / 2, headerY, 'center');
+
             const formattedDate = formatDateString(selectedReport.date_reported);
 
             var columns = ["Field", "Details"];
@@ -477,7 +354,7 @@
               body: data,
               theme: "striped",
               columnStyles: columnStyles,
-              margin: { top: 50 },              
+              margin: { top: startY + logoWidth + 20 },                
             
           });
 
@@ -531,5 +408,7 @@
       
     
     </script>
+    {% endblock %}
+
   </body>
 </html>

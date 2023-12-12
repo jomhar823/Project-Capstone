@@ -1,3 +1,4 @@
+{% extends 'user/header.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -261,91 +262,8 @@
           </nav>
     </header>
     <main>
-      <section class="hero">
-        <div class="hero-content">
-          <h1>TYPHOON BASICS</h1>
-          <p>Preparing for a safer future.</p>
-        </div>
-      </section>
-      
-      <nav class="navigation-bar">
-        <ul class="nav-list">
-          <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-custom text-light" href="{% url 'get_user_announcements' %}" role="button" aria-haspopup="true" aria-expanded="false">
-                Announcement              
-              </a>
-              
-            </div>
-          </li>
-          <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Flood              
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{% url 'user_flood' %}" href="#">Flood Reports</a>
-                <a class="dropdown-item" href="{% url 'userflood_basics' %}">Flood Basics</a>
-              </div>
-            </div>
-          </li>
-          <!-- <li class="dropdown">
-            <a class="btn btn-custom text-light" href="{% url 'user_weather' %}" role="button"  aria-haspopup="true" aria-expanded="false">
-              Weather Situation              
-            </a>
-            <div id="imageDropdown" class="dropdown-content">
-            </div>
-          </li> -->
-          <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Typhoon              
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{% url 'user_typhoon' %}" href="#">Typhoon Reports</a>
-                <a class="dropdown-item" href="{% url 'usertyphoon_basics' %}">Typhoon Basics</a>
-              </div>
-            </div>
-          </li>
-          <!-- <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Earthquake              
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{% url 'user_earthquake' %}" href="#">Earthquake Reports</a>
-                <a class="dropdown-item" href="{% url 'userearthquake_basics' %}">Earthquake Basics</a>
+      {% block content %}
 
-              </div>
-            </div>
-          </li> -->
-          <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Landslide              
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{% url 'user_landslide' %}">Landslide Reports</a>
-                <a class="dropdown-item" href="{% url 'userlandslide_basics' %}">Landslide Basics</a>
-              </div>
-            </div>
-          </li>
-
-          <li class="dropdown">
-            <div class="dropdown show custom-dropdown no-focus-outline">
-              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Reports              
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <!-- <a class="dropdown-item" href="{% url 'user_sit'%}" href="#">Situational Reports</a> -->
-                <a class="dropdown-item" href="{% url 'view-incident-reports'%}">Incident Reports</a>
-                <a class="dropdown-item" href="{% url 'get_userreports'%}">All Reports</a>
-                <a class="dropdown-item" href="{% url 'add-reports'%}">Add New Report</a>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </nav>
       <section class="calendar d-flex justify-content-center align-items-center mt-3 mb-5">
         <div class="roww learning-tools-flood-page w-100">
 
@@ -507,5 +425,7 @@
         <p>&copy; 2023 Disaster Risk Management</p>
       </nav>
     </footer>
+    {% endblock %}
+
   </body>
 </html>
