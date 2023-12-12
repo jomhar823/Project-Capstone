@@ -318,15 +318,29 @@
         $("#exportPdfButton").on("click", function () {
           if (selectedReport) {
             var doc = new jsPDF();
-            var logoUrl = "{% static 'capstoneapp/ibaanlogo1.png' %}";
-            doc.addImage(logoUrl, 'PNG', 10, 10, 30, 30);
+            var logos = [
+              "{% static 'capstoneapp/ibaanlogo1.png' %}",
+              "{% static 'capstoneapp/ibaanlogo2.png' %}",
+              "{% static 'capstoneapp/ibaanlogo2.png' %}"
 
-            var headerText = selectedReport.subject;
-            doc.setFontSize(18);
+            ]
+            var logoWidth = 20;
+            var centerX = doc.internal.pageSize.width / 2 - (logoWidth * 2) / 2;
+            var startY = 20;
+
+            logos.forEach(function (logo, index) {
+                doc.addImage(logo, 'PNG', centerX + index * logoWidth, startY, logoWidth, logoWidth);
+            });
+
+            var headerText = "MUNICIPAL DISASTER RISK REDUCTION AND MANAGEMENT OFFICE";
+            doc.setFontSize(15);
             var textWidth = doc.getStringUnitWidth(headerText) * doc.internal.getFontSize();
             var pageWidth = doc.internal.pageSize.width;
             var textX = (pageWidth - textWidth) / 2;
-            doc.text(headerText, pageWidth / 2, 20, 'center'); 
+            var headerY = startY + logoWidth + 7; 
+            doc.setFont(undefined, 'bold');
+            doc.text(headerText, pageWidth / 2, headerY, 'center');
+
             const formattedDate = formatDateString(selectedReport.date_reported);
 
             var columns = ["Field", "Details"];
