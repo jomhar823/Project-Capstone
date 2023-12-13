@@ -222,7 +222,7 @@ def home_flood_reports(request):
 
 def earthquake(request):
     subjects = ["Earthquake Report"]
-    reports = Report.objects.filter(subject__in=subjects).order_by('-date')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
