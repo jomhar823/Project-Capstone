@@ -395,6 +395,11 @@
                     console.error('Error fetching address:', error);
                 });
         }
+        function formatDateString(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', options);
+        }
       
       </script>
           {% endblock %}
