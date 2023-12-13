@@ -577,12 +577,9 @@
             });
             $('#exportAllPdfButton').click(function (e) {
                 e.preventDefault();
-                if (paginationData && paginationData.total_pages && !paginationData.has_next) {
-                    exportAllReportsToPDF(allBarangays);
-                } else {
-                    console.error('Pagination data is not available or does not meet the required conditions.');
-                }
+                exportAllReportsToPDF(allBarangays);
             });
+
 
             loadAllReports(currentPage);
 
