@@ -577,7 +577,7 @@
             });
             $('#exportAllPdfButton').click(function (e) {
                 e.preventDefault();
-                if (!paginationData.has_next) {
+                if (!paginationData.has_next | paginationData.has_next) {
                 exportAllReportsToPDF(allBarangays); 
                 }            
             });
