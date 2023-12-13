@@ -222,7 +222,7 @@ def home_flood_reports(request):
 
 def earthquake(request):
     subjects = ["Earthquake Report"]
-    reports = AdminReport.objects.filter(subject__in=subjects).order_by('-date')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -230,10 +230,23 @@ def earthquake(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
-    context = {
-        'reports': reports
-    }
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
+        })
 
+    context = {
+        'reports': reports,
+        'report_data': report_data
+    }
     return render(request, 'earthquake.html', context)
 
 def landslide(request):
@@ -428,7 +441,7 @@ def user_typhoon(request):
 
 def user_earthquake(request):
     subjects = ["Earthquake Report"]
-    reports = AdminReport.objects.filter(subject__in=subjects).order_by('-date')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -436,8 +449,22 @@ def user_earthquake(request):
     page = request.GET.get('page')
     reports = paginator.get_page(page)
 
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
+        })
+
     context = {
-        'reports': reports
+        'reports': reports,
+        'report_data': report_data
     }
 
     return render(request, 'user/user_earthquake.html', context)
@@ -905,7 +932,7 @@ def admin_typhoon_reports(request):
 @mdrrmc_required
 
 def admin_earthquake_reports(request):
-    admin_reports_list = AdminReport.objects.all()
+    admin_reports_list = Report.objects.all()
 
     page = request.GET.get('page', 1)
     paginator = Paginator(admin_reports_list, 10)
@@ -1458,10 +1485,10 @@ def get_earthquake_admin_report_details(request):
         return JsonResponse({"error": "Report ID is required"}, status=400)
 
     try:
-        report = AdminReport.objects.get(id=report_id)
-        serializer = AdminReportSerializer(report)
+        report = Report.objects.get(id=report_id)
+        serializer = ReportSerializer(report)
         return JsonResponse(serializer.data)
-    except AdminReport.DoesNotExist:
+    except Report.DoesNotExist:
         raise Http404("Report not found")
 
 @api_view(['PUT'])
@@ -1484,7 +1511,7 @@ def edit_earthquake_report(request, report_id):
 @api_view(['DELETE'])
 def delete_earthquake_report(request, report_id):
     try:
-        report = AdminReport.objects.get(pk=report_id)
+        report = Report.objects.get(pk=report_id)
         report.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     except AdminReport.DoesNotExist:
