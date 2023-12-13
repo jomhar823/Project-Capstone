@@ -441,7 +441,7 @@ def user_typhoon(request):
 
 def user_earthquake(request):
     subjects = ["Earthquake Report"]
-    reports = Report.objects.filter(subject__in=subjects).order_by('-date')
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
     reports_per_page = 10
     paginator = Paginator(reports, reports_per_page)
@@ -914,37 +914,51 @@ def admin_typhoon_reports(request):
 
     return render(request, 'admin/admin_typhoon_reports.html', context)
 
-# def admin_earthquake_reports(request):
-#     subjects = ["Earthquake Report"]
-#     reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
-
-#     reports_per_page = 10
-#     paginator = Paginator(reports, reports_per_page)
-
-#     page = request.GET.get('page')
-#     reports = paginator.get_page(page)
-
-#     context = {
-#         'reports': reports
-#     }
-
-#     return render(request, 'admin/admin_earthquake_reports.html', context)
-@mdrrmc_required
-
 def admin_earthquake_reports(request):
-    admin_reports_list = Report.objects.all()
+    subjects = ["Earthquake Report"]
+    reports = Report.objects.filter(subject__in=subjects).order_by('-date_reported')
 
-    page = request.GET.get('page', 1)
-    paginator = Paginator(admin_reports_list, 10)
+    reports_per_page = 10
+    paginator = Paginator(reports, reports_per_page)
 
-    try:
-        admin_reports = paginator.page(page)
-    except PageNotAnInteger:
-        admin_reports = paginator.page(1)
-    except EmptyPage:
-        admin_reports = paginator.page(paginator.num_pages)
+    page = request.GET.get('page')
+    reports = paginator.get_page(page)
 
-    return render(request, 'admin/admin_earthquake_reports.html', {'reports': admin_reports})
+    report_data = []
+    for report in reports:
+        report_data.append({
+            'id': report.id,
+            'subject': report.subject,
+            'description': report.description,
+            'attachment': report.attachment.url if report.attachment else '',  
+            'date_reported': report.date_reported,
+            'barangay': report.barangay,
+            'longitude': report.longitude,
+            'latitude': report.latitude,
+        })
+
+    context = {
+        'reports': reports,
+        'report_data': report_data
+    }
+
+    return render(request, 'admin/admin_earthquake_reports.html', context)
+# @mdrrmc_required
+
+# def admin_earthquake_reports(request):
+#     admin_reports_list = Report.objects.all()
+
+#     page = request.GET.get('page', 1)
+#     paginator = Paginator(admin_reports_list, 10)
+
+#     try:
+#         admin_reports = paginator.page(page)
+#     except PageNotAnInteger:
+#         admin_reports = paginator.page(1)
+#     except EmptyPage:
+#         admin_reports = paginator.page(paginator.num_pages)
+
+#     return render(request, 'admin/admin_earthquake_reports.html', {'reports': admin_reports})
 
 @mdrrmc_required
 def admin_landslide_reports(request):
