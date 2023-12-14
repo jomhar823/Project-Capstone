@@ -1165,6 +1165,11 @@ def get_reports_for_today(request):
         "pagination": pagination_data,
     })
 
+@api_view(['GET'])
+def get_all_reports_without_pagination(request):
+    reports = Report.objects.all().order_by('-date_reported')
+    serializer = ReportSerializer(reports, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def get_all_reports(request):

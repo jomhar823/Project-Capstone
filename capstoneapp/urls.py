@@ -21,6 +21,7 @@ urlpatterns = [
     path('home_barangays', views.home_barangays, name="home_barangays"),
     path('subjects', views.get_subjects, name='get_subjects'),
     path('delete_report/<int:report_id>/', views.delete_report, name='delete_report'),
+    path('get_all_reports_without_pagination/', views.get_all_reports_without_pagination, name='get_all_reports_without_pagination'),
 
     path('userflood_basics', views.userflood_basics, name="userflood_basics"),
     path('usertyphoon_basics', views.usertyph_basics, name="usertyphoon_basics"),
