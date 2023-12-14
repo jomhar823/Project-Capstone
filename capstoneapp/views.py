@@ -35,6 +35,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.utils import timezone
 from vonage import Client, Sms
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 # INITIAL HOMEPAGE
 
@@ -656,7 +658,7 @@ def submit_report(request):
             notification_message = f'A new report has been submitted by barangay {barangay}.\n\nBarangay: {barangay}\nSubject: {subject_details}\nDate: {date_reported}\nDescription: {description}'
             send_sms(to_phone_number, notification_message)
 
-            return redirect('add-reports')  
+            return HttpResponseRedirect(reverse('brgyhomepage') + '?success=true')
         else:
             print(serializer.errors)
             messages.error(request, 'Report submission failed. Please check your data.')

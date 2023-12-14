@@ -69,99 +69,119 @@
 
     </nav>
 </header>
-      <section>
-        <div class="report-container">
-            <h1 class="h1-report">ADD REPORT</h1>
-        </div>
-        {% for msg in messages %}
-            <div class="alert alert-success alert-dismissible fade show alert-fixed" role="alert">
-                <strong>{{msg}}</strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            
-        {% endfor %}
-        
-        
-        <div class="container-form align-items-center d-flex justify-content-center flex-column">
-            <form method="POST" enctype="multipart/form-data" action="{% url 'submit_report' %}">
-                {% csrf_token %}
-                <div class="desc-div">
-                        <select class="form-control w-100" name="subject" required>
-                            <option value="" disabled selected>Subject</option>
-                            <!-- <option value="Situational Report">Situational Report</option> -->
-                            <option value="Incident Report">Incident Report</option>
-                            <option value="Flood Report">Flood Report</option>
-                            <option value="Landslide Report">Landslide Report</option>
-                            <option value="Earthquake Report">Earthquake Report</option>
-                            <option value="Typhoon Report">Typhoon Report</option>
-                            
-                        </select><br>
+<section>
+  <div class="alert alert-danger alert-dismissible fade show alert-fixed" id="locationAlert" style="display: none;" role="alert">
+    Please select a location on the map before submitting the report.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+  <div class="report-container">
+      <h1 class="h1-report">ADD REPORT</h1>
+  </div>
+  {% for msg in messages %}
+      <div class="alert alert-success alert-dismissible fade show alert-fixed" role="alert">
+          <strong>{{msg}}</strong>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      
+  {% endfor %}
+  
+  
+  <div class="container-form align-items-center d-flex justify-content-center flex-column">
+      <form method="POST" enctype="multipart/form-data" action="{% url 'submit_report' %}">
+          {% csrf_token %}
+          <div class="desc-div">
+                  <select class="form-control w-100" name="subject" required>
+                      <option value="" disabled selected>Subject</option>
+                      <!-- <option value="Situational Report">Situational Report</option> -->
+                      <option value="Incident Report">Incident Report</option>
+                      <option value="Flood Report">Flood Report</option>
+                      <option value="Landslide Report">Landslide Report</option>
+                      <option value="Earthquake Report">Earthquake Report</option>
+                      <option value="Typhoon Report">Typhoon Report</option>
                       
-                    <textarea name="description"class="form-control"  placeholder="Description" required ></textarea><br>
-                    <label for="date_reported">Date Reported:</label>
-                    <input type="date" class="form-control" name="date_reported" required><br>
-                    <label for="attachment">Attachment:</label>
-                    <input type="file" class="form-control-file" name="attachment"><br>
-                </div>
-                <div class="parent-container d-flex flex-row justify-content-between">
-                    <div class="resp-brgy w-100 mr-3">
-                        <!-- <label for="barangay">Respondent Name:</label>
-                        <input type="text" class="form-control" name="respondent_name"  placeholder="Respondent Name" required><br> -->
-                        <input type="hidden" class="form-control" name="barangay" value="{{user.barangay}}" placeholder="Barangay" readonly><br>
-                        <!-- <label for="barangay">Time:</label>
-                        <input type="time" class="form-control" name="time_reported" required> -->
-                    </div>
-                    <div class="cont-date w-100">
-                        <!-- <label for="contact_number">Contact Number:</label>
-                        <input type="text" class="form-control" name="contact_number" maxlength="11" required><br> -->
-                        
-                    </div>
-                </div>
-                <div class="mb-2">
-                  <label for="location">Location:</label>
-                  <div id="map" style="height: 300px;"></div>
-                  <input type="hidden" id="latitude" name="latitude" />
-                  <input type="hidden" id="longitude" name="longitude" />
+                  </select><br>
+                
+              <textarea name="description"class="form-control"  placeholder="Description" required ></textarea><br>
+              <label for="date_reported">Date Reported:</label>
+              <input type="date" class="form-control" name="date_reported" required><br>
+              <label for="attachment">Attachment:</label>
+              <input type="file" class="form-control-file" name="attachment"><br>
+          </div>
+          <div class="parent-container d-flex flex-row justify-content-between">
+              <div class="resp-brgy w-100 mr-3">
+                  <!-- <label for="barangay">Respondent Name:</label>
+                  <input type="text" class="form-control" name="respondent_name"  placeholder="Respondent Name" required><br> -->
+                  <input type="hidden" class="form-control" name="barangay" value="{{user.barangay}}" placeholder="Barangay" readonly><br>
+                  <!-- <label for="barangay">Time:</label>
+                  <input type="time" class="form-control" name="time_reported" required> -->
+              </div>
+              <div class="cont-date w-100">
+                  <!-- <label for="contact_number">Contact Number:</label>
+                  <input type="text" class="form-control" name="contact_number" maxlength="11" required><br> -->
+                  
+              </div>
+          </div>
+          <div class="mb-2">
+            <label for="location">Location:</label>
+            <div id="map" style="height: 300px;"></div>
+            <input type="hidden" id="latitude" name="latitude" />
+            <input type="hidden" id="longitude" name="longitude" />
 
-                </div>
-                <button type="submit" class="btn btn-warning text-light btn-submit">Submit Report</button>
-            </form>
-        </div>
-        {% if form.errors %}
-            <ul>
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            {% endfor %}
-            </ul>
-        {% endif %}
+          </div>
+          <button type="submit" class="btn btn-warning text-light btn-submit">Submit Report</button>
+      </form>
+  </div>
+  {% if form.errors %}
+      <ul>
+      {% for field in form %}
+          {% for error in field.errors %}
+              <li>{{ error }}</li>
+          {% endfor %}
+      {% endfor %}
+      </ul>
+  {% endif %}
 
-      </section>
-      <script>
-        $(document).ready(function () {
-          var map = L.map('map').setView([13.8357, 121.1499], 14); 
+</section>
+<script>
+  $(document).ready(function () {
+    var map = L.map('map').setView([13.8357, 121.1499], 14); 
 
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-              attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-          }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
-          var marker;
+    var marker;
 
-          map.on('click', function (e) {
-              if (marker) {
-                  map.removeLayer(marker);
-              }
-              marker = L.marker(e.latlng).addTo(map);
-              $("#latitude").val(e.latlng.lat); 
-              $("#longitude").val(e.latlng.lng);
-          });
-      });
+    map.on('click', function (e) {
+        if (marker) {
+            map.removeLayer(marker);
+        }
+        marker = L.marker(e.latlng).addTo(map);
+        $("#latitude").val(e.latlng.lat); 
+        $("#longitude").val(e.latlng.lng);
+    });
 
-      </script>
+    $("form").submit(function (event) {
+        event.preventDefault();
+
+        var latitude = $("#latitude").val();
+        var longitude = $("#longitude").val();
+
+        if(!latitude || !longitude){
+          $("#locationAlert").show();
+        }else{
+          this.submit();
+        }
+    });
     
-    
+});
+
+</script>
+
+
 </body>
 </html>
