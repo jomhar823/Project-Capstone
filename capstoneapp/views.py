@@ -1362,25 +1362,36 @@ def get_filtered_reports_sit(request):
     return JsonResponse(report_data, safe=False)
 
 
+
 def get_filtered_reports_flood(request):
     selected_date = request.GET.get('date')
+    selected_barangay = request.GET.get('barangay')
 
-    reports = Report.objects.filter(date_reported=selected_date, subject='Flood Report')
-    
-    report_data = []
-    for report in reports:
-        report_data.append({
-            'id': report.id,
-            'subject': report.subject,
-            'description': report.description,
-            'attachment': report.attachment.url if report.attachment else '',
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            'barangay': report.barangay,
-            'longitude': report.longitude,
-            'latitude': report.latitude
-        })
+    try:
+        reports = Report.objects.filter(subject='Flood Report')
 
-    return JsonResponse(report_data, safe=False)
+        if selected_date:
+            reports = reports.filter(date_reported=selected_date)
+        
+        if selected_barangay:
+            reports = reports.filter(barangay=selected_barangay)
+            
+        report_data = []
+        for report in reports:
+            report_data.append({
+                'id': report.id,
+                'subject': report.subject,
+                'description': report.description,
+                'attachment': report.attachment.url if report.attachment else '',
+                'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+                'barangay': report.barangay,
+                'longitude': report.longitude,
+                'latitude': report.latitude
+            })
+
+        return JsonResponse(report_data, safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 def get_filtered_reports_typhoon(request):
     selected_date = request.GET.get('date')
@@ -1404,20 +1415,34 @@ def get_filtered_reports_typhoon(request):
 
 def get_filtered_reports_earthquake(request):
     selected_date = request.GET.get('date')
-    reports = AdminReport.objects.filter(date=selected_date, subject='Earthquake Report')
+    selected_barangay = request.GET.get('barangay')
+    try:
+        reports = Report.objects.filter(subject='Earthquake Report')
+
+        if selected_date:
+            reports = reports.filter(date_reported=selected_date)
+        
+        if selected_barangay:
+            reports = reports.filter(barangay=selected_barangay)
+
 
     
-    report_data = []
-    for report in reports:
-        report_data.append({
-            'id': report.id,
-            'subject': report.subject,
-            'description': report.description,
-            'date': report.date.strftime('%Y-%m-%d'),
-            'time': report.time.strftime('%H:%M'),
-        })
+        report_data = []
+        for report in reports:
+            report_data.append({
+                'id': report.id,
+                'subject': report.subject,
+                'description': report.description,
+                'attachment': report.attachment.url if report.attachment else '',
+                'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+                'barangay': report.barangay,
+                'longitude': report.longitude,
+                'latitude': report.latitude
+            })
 
-    return JsonResponse(report_data, safe=False)
+        return JsonResponse(report_data, safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 def get_filtered_reports_landslide(request):
     selected_date = request.GET.get('date')

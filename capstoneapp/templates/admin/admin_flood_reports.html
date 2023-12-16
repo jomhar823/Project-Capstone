@@ -27,7 +27,11 @@
             <div class="select-date d-flex flex-row justify-content-between w-100 mr-3">
               <input type="date" class="form-control" id="filter-date" name="filter-date">
             </div>
-
+            <div class="p-1">
+              <select id="barangaySelect" class="form-control" aria-label="Default select example">
+                  <option selected disabled>Barangay</option>
+                </select>
+          </div>
             <div class="button-div w-100">
               <button class="btn btn-primary" id="apply-filter">Apply Filter</button>
             </div>
@@ -241,7 +245,7 @@
         $("#apply-filter").on("click", function () {
           console.log("Apply filter button clicked");
           var selectedDate = $("#filter-date").val();
-          var selectedBarangay = $("#filter-barangay").val();
+          var selectedBarangay = $("#barangaySelect").val();
           console.log("Selected Date: " + selectedDate);
           console.log("Selected Barangay: " + selectedBarangay);
     
@@ -283,6 +287,36 @@
             },
           });
         });
+        
+            function populateBarangaysDropdown(barangays) {
+                const barangaySelect = $("#barangaySelect");
+
+                barangaySelect.empty(); 
+
+                barangaySelect.append('<option selected disabled>Barangay</option>');
+
+                barangays.forEach(barangay => {
+                    const option = `<option value="${barangay.barangay}">${barangay.barangay}</option>`;
+                    barangaySelect.append(option);
+                });
+            }
+
+            function fetchBarangays() {
+                $.ajax({
+                    url: '/get_barangays/',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log('Received barangays:', data);
+                        populateBarangaysDropdown(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching barangays:', error);
+                    }
+                });
+            }
+
+            fetchBarangays();
     
         $.ajax({
           url: "{% url 'get_barangays' %}",

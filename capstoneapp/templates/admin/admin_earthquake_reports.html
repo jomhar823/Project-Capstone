@@ -24,6 +24,11 @@
           <div class="filter-section d-flex justify-content-between align-items-center mb-4 mt-3">
             <div class="select-date d-flex flex-row justify-content-between w-100 mr-3">
               <input type="date" class="form-control" id="filter-date" name="filter-date">
+              <div class="p-1">
+                <select id="barangaySelect" class="form-control" aria-label="Default select example">
+                    <option selected disabled>Barangay</option>
+                  </select>
+              </div>
             </div>
             <div class="button-div w-100">
               <button class="btn btn-primary" id="apply-filter">Apply Filter</button>
@@ -175,8 +180,8 @@
           } else {
             $("#modalAttachment").text("No attachment available");
           }
-    
-          $("#modalDateReported").text(report.date);
+          console.log(report.date_reported)
+          $("#modalDateReported").text(report.date_reported);
           $("#modalBarangay").text(report.barangay);
           var lat = report.latitude; 
           var lng = report.longitude;
@@ -217,7 +222,7 @@
             subject: $(this).data("subject"),
             description: $(this).data("description"),
             attachment: $(this).data("attachment"),
-            date: $(this).data("date"),
+            date_reported: $(this).data("date"),
             barangay: $(this).data("barangay"),
             latitude: $(this).data("latitude"),
             longitude: $(this).data("longitude"),
@@ -238,13 +243,17 @@
         $("#apply-filter").on("click", function () {
           console.log("Apply filter button clicked");
           var selectedDate = $("#filter-date").val();
-        
+          var selectedBarangay = $("#barangaySelect").val();
+          console.log("Selected Date: " + selectedDate);
+          console.log("Selected Barangay: " + selectedBarangay);
     
           $.ajax({
             url: "{% url 'get_filtered_reports_earthquake' %}",
             type: "GET",
             data: {
               date: selectedDate,
+              barangay: selectedBarangay,
+
             },
             success: function (data) {
               console.log("Received filtered reports data: ", data);
@@ -259,14 +268,14 @@
                 for (var i = 0; i < data.length; i++) {
                   var report = data[i];
     
-                  var jsDate = new Date(report.date);
+                  var jsDate = new Date(report.date_reported);
                   var formattedDate = jsDate.toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
                   });
     
-                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date="' + report.date + '" data-time="' + report.time + '" data-barangay="' + report.barangay + '" data-respondent="' + report.respondent_name + '" data-contact="' + report.contact_number + '" data-longitude="' + report.longitude + '" data-latitude="' + report.latitude + '">';
+                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date-reported="' + report.date_reported + '" data-time="' + report.time + '" data-barangay="' + report.barangay + '" data-respondent="' + report.respondent_name + '" data-contact="' + report.contact_number + '" data-longitude="' + report.longitude + '" data-latitude="' + report.latitude + '">';
                   newRow += '<td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg></td>';
                   newRow += '<td>' + report.subject + '</td>';
                   newRow += '<td>' + formattedDate + '</td>';
@@ -278,6 +287,35 @@
             },
           });
         });
+        function populateBarangaysDropdown(barangays) {
+                const barangaySelect = $("#barangaySelect");
+
+                barangaySelect.empty(); 
+
+                barangaySelect.append('<option selected disabled>Barangay</option>');
+
+                barangays.forEach(barangay => {
+                    const option = `<option value="${barangay.barangay}">${barangay.barangay}</option>`;
+                    barangaySelect.append(option);
+                });
+            }
+
+            function fetchBarangays() {
+                $.ajax({
+                    url: '/get_barangays/',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log('Received barangays:', data);
+                        populateBarangaysDropdown(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching barangays:', error);
+                    }
+                });
+            }
+
+            fetchBarangays();
     
         $.ajax({
           url: "{% url 'get_barangays' %}",
