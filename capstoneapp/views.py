@@ -1175,6 +1175,7 @@ def get_all_reports_without_pagination(request):
 def get_all_reports(request):
     date_param = request.GET.get('date', None)
     subject_param = request.GET.get('subject', None)
+    barangay = request.GET.get('barangay', None)
 
     page = request.GET.get('page', 1)
 
@@ -1189,6 +1190,9 @@ def get_all_reports(request):
 
     if subject_param:
         reports = reports.filter(subject__icontains=subject_param)
+
+    if barangay:
+        reports = reports.filter(barangay=barangay)
 
     reports = reports.order_by('-date_reported')
 
