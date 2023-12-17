@@ -40,6 +40,7 @@
                     <th></th>
                     <th>SUBJECT</th>
                     <th style="width: 20%;">DATE REPORTED</th>
+                    <th style="width: 20%;">TIME REPORTED</th>
                     <th style="width: 20%;">BARANGAY</th>
                 </tr>
             </thead>
@@ -52,6 +53,7 @@
                   </svg></td>
                   <td>{{ report.subject }}</td>
                   <td>{{ report.date_reported|date:'F j, Y' }}</td>
+                  <td>{{ report.time_reported|date:'h:i A' }}</td>
                   <td>{{ report.barangay }}</td>
               </tr>
               {% endfor %}
@@ -109,11 +111,10 @@
                                   <th>DATE REPORTED</th>
                                   <td><span id="modalDateReported"></span></td>
                               </tr>
-                              <!-- <tr>
+                              <tr>
                                   <th>TIME REPORTED</th>
                                   <td><span id="modalTimeReported"></span></td>
-                              </tr> -->
-
+                              </tr>
                               <tr>
                                 <th>DESCRIPTION</th>
                                 <td><span id="modalDescription"></span></td>
@@ -171,6 +172,7 @@
     
         function updateModalContent(report) {
           const formattedDate = formatDateString(report.date_reported);
+          const formattedTime = formatTimeString(report.time_reported);
 
           $("#modalSubject").text(report.subject);
           $("#modalDescription").text(report.description);
@@ -187,7 +189,7 @@
           }
     
           $("#modalDateReported").text(formattedDate);
-          $("#modalTimeReported").text(report.time_reported);
+          $("#modalTimeReported").text(formattedTime);
 
           var lat = report.latitude; 
           var lng = report.longitude;
@@ -271,7 +273,8 @@
               } else {
                 for (var i = 0; i < data.length; i++) {
                   var report = data[i];
-    
+                  const formattedTime = formatTimeString(report.time_reported);
+
                   var jsDate = new Date(report.date_reported);
                   var formattedDate = jsDate.toLocaleDateString("en-US", {
                     year: "numeric",
@@ -283,6 +286,7 @@
                   newRow += '<td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg></td>';
                   newRow += '<td>' + report.subject + '</td>';
                   newRow += '<td>' + formattedDate + '</td>';
+                  newRow += '<td>' + formattedTime + '</td>';
                   newRow += '<td>' + report.barangay + '</td>';
                   
                   newRow += '</tr>';
@@ -406,6 +410,11 @@
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             const date = new Date(dateString);
             return date.toLocaleDateString('en-US', options);
+        }
+        function formatTimeString(timeString) {
+            const options = { hour: '2-digit', minute: '2-digit' };
+            const time = new Date(`2000-01-01T${timeString}`);
+            return time.toLocaleTimeString('en-US', options);
         }
     </script>
     </main>
