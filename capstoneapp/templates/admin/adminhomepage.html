@@ -63,7 +63,7 @@
                 <tr>
                     <th>SUBJECT</th>
                     <th style="width: 20%;">DATE REPORTED</th>
-                    <!-- <th style="width: 20%;">TIME REPORTED</th> -->
+                    <th style="width: 20%;">TIME REPORTED</th>
                     <th style="width: 20%;">BARANGAY</th>
                 </tr>
             </thead>
@@ -106,10 +106,10 @@
                                     <th>DATE REPORTED</th>
                                 <td><span id="modalDateReported"></span></td>
                             </tr>
-                                <!-- <tr>
+                                <tr>
                                     <th>TIME REPORTED</th>
                                 <td><span id="modalTimeReported"></span></td>
-                                </tr> -->
+                                </tr>
                                 <tr>
                                 <th>BARANGAY</th>
                                 <td><span id="modalBarangay"></span></td>
@@ -308,7 +308,7 @@
                   description: $(this).data("description"),
                   attachment: $(this).data("attachment"),
                   date_reported: $(this).data("date-reported"),
-                  // time_reported: $(this).data("time-reported"),
+                  time_reported: $(this).data("time-reported"),
                 };
                 selectedReport = report;
                 console.log('selected report', selectedReport)
@@ -547,6 +547,7 @@
                 dataType: "json",
                 success: function (data) {
                   const formattedDate = formatDateString(data.date_reported);
+                  const formattedTime = formatTimeString(data.time_reported);
 
                     $("#modalSubject").text(data.subject);
                     $("#modalDateReported").text(formattedDate);
@@ -558,6 +559,7 @@
                     } else {
                         $("#editAttachment").empty();
                     }
+                    $("#modalTimeReported").text(formattedTime);
 
                     var lat = data.latitude; 
                     var lng = data.longitude;
@@ -752,6 +754,8 @@
                     const tableRow = `<tr data-toggle="modal" data-target="#reportModal" data-report-id="${report.id}" data-subject="${report.subject}" data-description="${report.description}" data-attachment="${report.attachment}" data-date-reported="${report.date_reported}">
                         <td>${report.subject}</td>
                         <td>${formattedDate}</td>
+                        <td>${formattedTime}</td>
+
                         <td>${report.barangay}</td>
                     </tr>`;
                     table.append(tableRow);

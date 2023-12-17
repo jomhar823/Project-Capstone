@@ -24,11 +24,12 @@
           <div class="filter-section d-flex justify-content-between align-items-center mb-4 mt-3">
             <div class="select-date d-flex flex-row justify-content-between w-100 mr-3">
               <input type="date" class="form-control" id="filter-date" name="filter-date">
-              <div class="p-1">
-                <select id="barangaySelect" class="form-control" aria-label="Default select example">
-                    <option selected disabled>Barangay</option>
-                  </select>
-              </div>
+              
+            </div>
+            <div class="select-brgy w-100 d-flex flex-row justify-content-between  mr-3">
+              <select id="barangaySelect" class="form-control" aria-label="Default select example">
+                  <option selected disabled>Barangay</option>
+                </select>
             </div>
             <div class="button-div w-100">
               <button class="btn btn-primary" id="apply-filter">Apply Filter</button>
@@ -40,18 +41,20 @@
                     <th></th>
                     <th>SUBJECT</th>
                     <th style="width: 20%;">DATE REPORTED</th>
+                    <th style="width: 20%;">TIME REPORTED</th>
                     <th style="width: 20%;">BARANGAY</th>
                 </tr>
             </thead>
             <tbody>
               {% for report in report_data %}
-              <tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="{{ report.subject }}" data-description="{{ report.description }}" data-attachment="{{ report.attachment }}" data-date="{{ report.date_reported|date:'F j, Y' }}" data-time="{{ report.time|date:'H:i' }}" data-origin="{{ report.origin }}" data-barangay="{{report.barangay}}" data-latitude="{{report.latitude}}" data-longitude="{{report.longitude}}">
+              <tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="{{ report.subject }}" data-description="{{ report.description }}" data-attachment="{{ report.attachment }}" data-date="{{ report.date_reported|date:'F j, Y' }}" data-time="{{ report.time_reported|date:'H:i' }}" data-origin="{{ report.origin }}" data-barangay="{{report.barangay}}" data-latitude="{{report.latitude}}" data-longitude="{{report.longitude}}">
                 <td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                     <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                     <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
                   </svg></td>
                   <td>{{ report.subject }}</td>
                   <td>{{ report.date_reported|date:'F j, Y' }}</td>
+                  <td>{{ report.time_reported|date:'h:i A' }}</td>
                   <td>{{ report.barangay }}</td>
               </tr>
               {% endfor %}
@@ -108,6 +111,10 @@
                                   <th>DATE REPORTED</th>
                                   <td><span id="modalDateReported"></span></td>
                               </tr>
+                              <tr>
+                                <th>TIME REPORTED</th>
+                                <td><span id="modalTimeReported"></span></td>
+                            </tr>
                               <tr>
                                   <th>BARANGAY</th>
                                   <td><span id="modalBarangay"></span></td>
@@ -167,6 +174,9 @@
         let marker;
     
         function updateModalContent(report) {
+          const formattedDate = formatDateString(report.date_reported);
+          const formattedTime = formatTimeString(report.time_reported);
+
           $("#modalSubject").text(report.subject);
           $("#modalDescription").text(report.description);
           $("#modalAttachment").html("");
@@ -180,9 +190,10 @@
           } else {
             $("#modalAttachment").text("No attachment available");
           }
-          console.log(report.date_reported)
-          $("#modalDateReported").text(report.date_reported);
+          $("#modalDateReported").text(formattedDate);
+          $("#modalTimeReported").text(formattedTime);
           $("#modalBarangay").text(report.barangay);
+
           var lat = report.latitude; 
           var lng = report.longitude;
           console.log('lat', lat)
@@ -223,6 +234,7 @@
             description: $(this).data("description"),
             attachment: $(this).data("attachment"),
             date_reported: $(this).data("date"),
+            time_reported: $(this).data("time"),
             barangay: $(this).data("barangay"),
             latitude: $(this).data("latitude"),
             longitude: $(this).data("longitude"),
@@ -267,7 +279,8 @@
               } else {
                 for (var i = 0; i < data.length; i++) {
                   var report = data[i];
-    
+                  const formattedTime = formatTimeString(report.time_reported);
+
                   var jsDate = new Date(report.date_reported);
                   var formattedDate = jsDate.toLocaleDateString("en-US", {
                     year: "numeric",
@@ -279,6 +292,7 @@
                   newRow += '<td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg></td>';
                   newRow += '<td>' + report.subject + '</td>';
                   newRow += '<td>' + formattedDate + '</td>';
+                  newRow += '<td>' + formattedTime + '</td>';
                   newRow += '<td>' + report.barangay + '</td>';
                   newRow += '</tr>';
                   $("#mainTable tbody").append(newRow);
@@ -431,7 +445,12 @@
           const date = new Date(dateString);
           return date.toLocaleDateString('en-US', options);
       }
-    
+      function formatTimeString(timeString) {
+            const options = { hour: '2-digit', minute: '2-digit' };
+            const time = new Date(`2000-01-01T${timeString}`);
+            return time.toLocaleTimeString('en-US', options);
+        }
+      
     </script>
           {% endblock %}
 

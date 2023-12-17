@@ -116,6 +116,7 @@ def home_incident_reports(request):
             'description': report.description,
             'attachment': report.attachment.url if report.attachment else '',  
             'date_reported': report.date_reported,
+            'time_reported': report.time_reported,
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
@@ -1330,25 +1331,31 @@ def get_filtered_reports(request):
     selected_date = request.GET.get('date')
     selected_barangay = request.GET.get('barangay')
 
-    reports = Report.objects.filter(date_reported=selected_date, subject='Incident Report')
+    try:
+        reports = Report.objects.filter(subject='Incident Report')
 
-    if selected_barangay:
-        reports = reports.filter(barangay = selected_barangay)
-    
-    report_data = []
-    for report in reports:
-        report_data.append({
-            'subject': report.subject,
-            'description': report.description,
-            'attachment': report.attachment.url if report.attachment else '',
-            'date_reported': report.date_reported.strftime('%Y-%m-%d'),
-            # 'time_reported': report.time_reported.strftime('%H:%M'),
-            'barangay': report.barangay,
-            'longitude': report.longitude,
-            'latitude': report.latitude
-        })
+        if selected_date:
+            reports = reports.filter(date_reported=selected_date)
+        
+        if selected_barangay:
+            reports = reports.filter(barangay=selected_barangay)
+        
+        report_data = []
+        for report in reports:
+            report_data.append({
+                'subject': report.subject,
+                'description': report.description,
+                'attachment': report.attachment.url if report.attachment else '',
+                'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+                'time_reported': report.time_reported.strftime('%H:%M'),
+                'barangay': report.barangay,
+                'longitude': report.longitude,
+                'latitude': report.latitude
+            })
 
-    return JsonResponse(report_data, safe=False)
+        return JsonResponse(report_data, safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 def get_filtered_reports_sit(request):
     selected_date = request.GET.get('date')
@@ -1398,6 +1405,7 @@ def get_filtered_reports_flood(request):
                 'description': report.description,
                 'attachment': report.attachment.url if report.attachment else '',
                 'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+                'time_reported': report.time_reported.strftime('%H:%M'),
                 'barangay': report.barangay,
                 'longitude': report.longitude,
                 'latitude': report.latitude
@@ -1426,6 +1434,7 @@ def get_filtered_reports_typhoon(request):
                 'description': report.description,
                 'attachment': report.attachment.url if report.attachment else '',
                 'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+                'time_reported': report.time_reported.strftime('%H:%M'),
                 'barangay': report.barangay,
                 'longitude': report.longitude,
                 'latitude': report.latitude
@@ -1457,6 +1466,7 @@ def get_filtered_reports_earthquake(request):
                 'description': report.description,
                 'attachment': report.attachment.url if report.attachment else '',
                 'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+                'time_reported': report.time_reported.strftime('%H:%M'),
                 'barangay': report.barangay,
                 'longitude': report.longitude,
                 'latitude': report.latitude
@@ -1487,6 +1497,7 @@ def get_filtered_reports_landslide(request):
                 'description': report.description,
                 'attachment': report.attachment.url if report.attachment else '',
                 'date_reported': report.date_reported.strftime('%Y-%m-%d'),
+                'time_reported': report.time_reported.strftime('%H:%M'),
                 'barangay': report.barangay,
                 'longitude': report.longitude,
                 'latitude': report.latitude
