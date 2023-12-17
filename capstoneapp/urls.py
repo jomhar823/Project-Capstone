@@ -129,6 +129,7 @@ urlpatterns = [
 
     #
     path('view-admin-incident-reports/', views.admin_incident_reports, name='view-admin-incident-reports'),
-
+    path('update_response_status/', views.update_response_status, name='update_response_status'),
+    path('get_response_status/<int:report_id>/', views.get_response_status, name='get_response_status'),
 
 ]
