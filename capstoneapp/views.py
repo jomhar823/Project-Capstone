@@ -37,6 +37,7 @@ from django.utils import timezone
 from vonage import Client, Sms
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_protect
 
 # INITIAL HOMEPAGE
 
@@ -828,6 +829,7 @@ def admin_incident_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'response_status': report.response_status,
 
     })
 
@@ -887,6 +889,7 @@ def admin_sit_reports(request):
             'latitude': report.latitude,
             'respondent_name': report.respondent_name,
             'contact_number': report.contact_number
+
     })
 
     context = {
@@ -919,6 +922,7 @@ def admin_typhoon_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'response_status': report.response_status,
         })
 
     context = {
@@ -950,6 +954,7 @@ def admin_earthquake_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'response_status': report.response_status,
         })
 
     context = {
@@ -998,6 +1003,7 @@ def admin_landslide_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'response_status': report.response_status,
         })
 
     context = {
@@ -1030,6 +1036,7 @@ def admin_flood_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'response_status': report.response_status,
         })
 
     context = {
@@ -1232,6 +1239,33 @@ def get_all_reports(request):
         "reports": serializer.data,
         "pagination": pagination_data,
     })
+
+@csrf_protect
+def update_response_status(request):
+    report_id = request.POST.get('report_id')
+    response_status = request.POST.get('response_status')
+
+    try:
+        report = Report.objects.get(id=report_id)
+        report.response_status = response_status
+        report.save()
+        return JsonResponse({'success': True})
+    except Report.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Report not found'})
+    except Exception as e:
+        print(f"Error updating response status: {e}")
+        return JsonResponse({'success': False, 'error': str(e)})
+@csrf_protect
+def get_response_status(request, report_id):
+    try:
+        report = Report.objects.get(id=report_id)
+        response_status = report.response_status
+        return JsonResponse({'success': True, 'response_status': response_status})
+    except Report.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Report not found'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+    
 
 def get_report_details(request):
     report_id = request.GET.get('report_id')
