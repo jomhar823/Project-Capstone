@@ -65,6 +65,8 @@
                     <th style="width: 20%;">DATE REPORTED</th>
                     <th style="width: 20%;">TIME REPORTED</th>
                     <th style="width: 20%;">BARANGAY</th>
+                    <!-- <th style="width: 20%;">ACTION</th> -->
+
                 </tr>
             </thead>
             <tbody id="all-reports-table">
@@ -98,7 +100,18 @@
                     <div class="modal-body">
                         <table class="table table-bordered">
                             <tbody>
+                                <input type="hidden" id="reportIdInput" />
+
                                 <tr>
+                                    <th>ACTION</th>
+                                    <td><select class='response-select' data-report-id='${report.id}'>
+                                        <option value='' selected disabled hidden>Select</option>
+                                        <option value='Responded'>Responded</option>
+                                        <option value='Declined'>Declined</option></select>
+                                        <button class="save-button">save</button>
+                                    </td>
+                                    </tr>
+                            <tr>
                                 <th>SUBJECT</th>
                                 <td><span id="modalSubject"></span></td>
                             </tr>
@@ -114,7 +127,7 @@
                                 <th>BARANGAY</th>
                                 <td><span id="modalBarangay"></span></td>
                                 </tr>
-                            <tr>
+                                <tr>
                                 <th>DESCRIPTION</th>
                                 <td><span id="modalDescription"></span></td>
                               </tr>
@@ -129,7 +142,10 @@
                               <th>LOCATION</th>
                               <td><span id="modalLocation"></span></td>
                             </tr>
-
+                            <tr>
+                                <th>STATUS</th>
+                                <td><span id="modalStatus"></span></td>
+                              </tr>
                                 </tbody>
                             </table>
                             <!-- <a href="#" id="exportPdfButton" class="btn btn-primary">Export to PDF</a> -->
@@ -309,6 +325,7 @@
                   attachment: $(this).data("attachment"),
                   date_reported: $(this).data("date-reported"),
                   time_reported: $(this).data("time-reported"),
+                  response_status: $(this).data("status")
                 };
                 selectedReport = report;
                 console.log('selected report', selectedReport)
@@ -348,6 +365,8 @@
                   ["Barangay", selectedReport.barangay],
                   ["Description", selectedReport.description],
                   ["Location", $("#modalLocation").text()],
+                  ["Status", selectedReport.response_status],
+
                 ];
 
                 var columnWidths = [50, 100]; 
@@ -444,6 +463,7 @@
                         barangay: allBarangays[index].barangay, 
                         longitude: allBarangays[index].longitude,
                         latitude: allBarangays[index].latitude,
+                        response_status: allBarangays[index].response_status
                     };
     
                     doc.addPage();
@@ -467,6 +487,8 @@
                         ["Date Reported", selectedReport.date_reported],
                         ["Barangay", selectedReport.barangay],
                         ["Description", selectedReport.description],
+                        ["Status", selectedReport.response_status],
+
                     ];
     
                     var address = "";
@@ -546,6 +568,7 @@
                 data: { report_id: reportId },
                 dataType: "json",
                 success: function (data) {
+                    console.log('data', data)
                   const formattedDate = formatDateString(data.date_reported);
                   const formattedTime = formatTimeString(data.time_reported);
 
@@ -560,6 +583,7 @@
                         $("#editAttachment").empty();
                     }
                     $("#modalTimeReported").text(formattedTime);
+                    $("#modalStatus").text(data.response_status);
 
                     var lat = data.latitude; 
                     var lng = data.longitude;
@@ -587,8 +611,26 @@
                         map = null;
                         }
                     });
-                    
-
+                    console.log('before ajax')
+                    $.ajax({
+                        url: `/get_response_status/${reportId}/`,
+                        method: "GET",
+                        success: function (getResponse) {
+                            console.log('AJAX Success - get_response_status:', getResponse);
+                            if (getResponse.success) {
+                                const responseStatus = getResponse.response_status;
+                                console.log('Response Status:', responseStatus);
+                                const selectElement = $(`select.response-select[data-report-id='${reportId}']`);
+                                selectElement.val(responseStatus).change();
+                            } else {
+                                console.error('Failed to fetch response status:', getResponse.error);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('AJAX Error - get_response_status:', error);
+                            console.log('AJAX Error Details:', xhr);
+                        }
+                    });
                 },
                 error: function (xhr, status, error) {
                     console.error("Error fetching report details: " + error);
@@ -737,8 +779,6 @@
             
         });
 
-        
-
         function updateReportsTable(reports, tableId) {
             console.log("Update function called for table ID:", tableId);
             const table = $(`#${tableId}`);
@@ -750,12 +790,25 @@
                 reports.forEach(function (report) {
                     const formattedDate = formatDateString(report.date_reported);
                     const formattedTime = formatTimeString(report.time_reported);
+                    
+                    let respondButton;
+                    if(report.responded){
+                        respondButton = "<span class='btn btn-sm btn-secondary'>Responded</span>";
+                    }else{
+                        respondButton = `<button class='btn btn-sm btn-primary respond-button' data-report-id='${report.id}'>Respond</button>`;
+                    }
 
-                    const tableRow = `<tr data-toggle="modal" data-target="#reportModal" data-report-id="${report.id}" data-subject="${report.subject}" data-description="${report.description}" data-attachment="${report.attachment}" data-date-reported="${report.date_reported}">
+                    let declinedButton;
+                    if (report.responded || report.declined) {
+                        declinedButton = "<span class='btn btn-sm btn-secondary' disabled>Declined</span>";
+                    } else {
+                        declinedButton = `<button class='btn btn-sm btn-danger decline-button' data-report-id='${report.id}'>Decline</button>`;
+                    }
+
+                    const tableRow = `<tr data-toggle="modal" data-target="#reportModal" data-report-id="${report.id}" data-subject="${report.subject}" data-responded="${report.responded}" data-description="${report.description}" data-attachment="${report.attachment}" data-date-reported="${report.date_reported}" data-status="${report.response_status}">
                         <td>${report.subject}</td>
                         <td>${formattedDate}</td>
                         <td>${formattedTime}</td>
-
                         <td>${report.barangay}</td>
                     </tr>`;
                     table.append(tableRow);
@@ -803,6 +856,103 @@
                     });
             });
         }
+        const csrfToken = "{{ csrf_token }}";
+
+        // $(document).on('click', '.respond-button', function () {
+        //     const reportId = $(this).data('report-id');
+
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: '/update_report_responded/',
+        //         beforeSend: function(xhr, settings) {
+        //             xhr.setRequestHeader('X-CSRFToken', csrfToken); 
+        //         },
+        //         data: {
+        //             report_id: reportId,
+        //             responded: true
+        //         },
+        //         success: function (response) {
+        //             if (response.success) {
+        //                 $(`.respond-button[data-report-id='${reportId}']`).removeClass('btn-primary').addClass('btn-secondary').text('Responded');
+        //             } else {
+        //                 console.error('Failed to update responded status');
+        //             }
+        //         },
+        //         error: function (xhr, status, error) {
+        //             console.error('Error:', error);
+        //         }
+        //     });
+        // });
+        // $(document).on('click', '.decline-button', function () {
+        //     const reportId = $(this).data('report-id');
+
+        //     const confirmation = window.confirm('Are you sure you want to decline this report?');
+            
+        //     if (confirmation) {
+        //         $.ajax({
+        //             type: 'POST',
+        //             url: '/update_report_declined/',
+        //             beforeSend: function (xhr, settings) {
+        //                 xhr.setRequestHeader('X-CSRFToken', csrfToken);
+        //             },
+        //             data: {
+        //                 report_id: reportId,
+        //                 declined: true
+        //             },
+        //             success: function (response) {
+        //                 if (response.success) {
+        //                     $(`.decline-button[data-report-id='${reportId}']`).removeClass('btn-warning').addClass('btn-danger').text('Declined');
+        //                 } else {
+        //                     console.error('Failed to update declined status');
+        //                 }
+        //             },
+        //             error: function (xhr, status, error) {
+        //                 console.error('Error:', error);
+        //             }
+        //         });
+        //     } else {
+        //         console.log('Decline operation canceled');
+        //     }
+        // });
+        $(document).ready(function() {
+            $('#reportModal').on('show.bs.modal', function(event) {
+                const button = $(event.relatedTarget);
+                const reportId = button.closest('tr').data('report-id');
+                $(this).find('#reportIdInput').val(reportId);
+
+            });
+            $('#reportModal').on('click', '.save-button', function() {
+                const reportId = $('#reportIdInput').val();
+                const selectedOption = $('.response-select').val();
+                console.log(reportId)
+                if (reportId && selectedOption) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/update_response_status/',
+                        beforeSend: function(xhr, settings) {
+                            xhr.setRequestHeader('X-CSRFToken', csrfToken); 
+                        },
+                        data: {
+                            report_id: reportId,
+                            response_status: selectedOption
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                console.log('Response status updated successfully');
+                                $('#reportModal').modal('hide');
+                            } else {
+                                console.error('Failed to update response status');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                } else {
+                    console.error('Report ID or selected option is missing');
+                }
+            });
+        });
         
     </script>
     {% endblock %}

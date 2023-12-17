@@ -29,6 +29,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     user_type = models.CharField(max_length=8, choices=(('mdrrmc', 'MDRRMC Admin'), ('barangay', 'Barangay Admin')), default='mdrrmc')
+    brgylatitude = models.DecimalField(max_digits=20, decimal_places=15, blank=True, null=True)
+    brgylongitude = models.DecimalField(max_digits=20, decimal_places=15, blank=True, null=True)
     
     user_permissions = models.ManyToManyField(
         'auth.Permission',
