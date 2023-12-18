@@ -131,6 +131,10 @@
                               <th>ATTACHMENT</th>
                               <td><span id="modalAttachment"></span></td>
                           </tr>
+                          <tr>
+                            <th>STATUS</th>
+                            <td><span id="modalStatus"></span></td>
+                        </tr>
                           </tbody>
                       </table>
                       <label>Location</label>
@@ -189,6 +193,8 @@
           $("#modalDateReported").text(formattedDate);
           $("#modalTimeReported").text(formattedTime);
 
+          $("#modalStatus").text(report.response_status);
+
           var lat = report.latitude; 
           var lng = report.longitude;
           console.log('lat', lat)
@@ -232,6 +238,7 @@
             latitude: $(this).data("latitude"),
             longitude: $(this).data("longitude"),
             barangay: $(this).data("barangay"),
+            response_status: $(this).data("status")
 
           };
           selectedReport = report;
@@ -286,7 +293,8 @@
                   newRow += '<td>' + formattedDate + '</td>';
                   newRow += '<td>' + formattedTime + '</td>';
                   newRow += '<td>' + report.barangay + '</td>';
-                  
+                  newRow += '<td>' + report.response_status + '</td>';
+
                   newRow += '</tr>';
                   $("#mainTable tbody").append(newRow);
                 }
@@ -373,6 +381,8 @@
               ["Barangay", selectedReport.barangay],
               ["Description", selectedReport.description],
               ["Location", $("#modalLocation").text()],
+              ["Status", selectedReport.response_status],
+
             ];
 
             var columnWidths = [50, 100]; 

@@ -121,6 +121,7 @@ def home_incident_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'response_status': report.response_status,
     })
 
     context = {
@@ -186,6 +187,7 @@ def home_typhoon_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+                                    'response_status': report.response_status,
         })
 
     context = {
@@ -217,6 +219,8 @@ def home_flood_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+                                    'response_status': report.response_status,
+
         })
 
     context = {
@@ -248,6 +252,8 @@ def earthquake(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+                                    'response_status': report.response_status,
+
         })
 
     context = {
@@ -278,6 +284,8 @@ def landslide(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+                                    'response_status': report.response_status,
+
         })
 
     context = {
@@ -308,6 +316,8 @@ def flood(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+                                    'response_status': report.response_status,
+
         })
 
     context = {
@@ -378,6 +388,7 @@ def incident_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'response_status': report.response_status,
     })
 
     context = {
@@ -410,6 +421,7 @@ def user_flood(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'response_status': report.response_status,
         })
 
     context = {
@@ -441,6 +453,8 @@ def user_typhoon(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'response_status': report.response_status,
+
         })
 
     context = {
@@ -472,6 +486,7 @@ def user_earthquake(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'response_status': report.response_status,
         })
 
     context = {
@@ -503,6 +518,7 @@ def user_landslide(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'response_status': report.response_status,
         })
 
     context = {

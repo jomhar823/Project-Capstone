@@ -28,8 +28,13 @@
           <div class="filter-section d-flex justify-content-between align-items-center mb-4 mt-3">
             <div class="select-date d-flex flex-row justify-content-between w-100 mr-3">
               <input type="date" class="form-control" id="filter-date" name="filter-date">
+              
             </div>
-
+            <div class="select-brgy w-100 d-flex flex-row justify-content-between  mr-3">
+              <select id="barangaySelect" class="form-control" aria-label="Default select example">
+                  <option selected disabled>Barangay</option>
+                </select>
+            </div>
             <div class="button-div w-100">
               <button class="btn btn-primary" id="apply-filter">Apply Filter</button>
             </div>
@@ -42,11 +47,13 @@
                     <th style="width: 20%;">DATE REPORTED</th>
                     <th style="width: 20%;">TIME REPORTED</th>
                     <th style="width: 20%;">BARANGAY</th>
+                    <th style="width: 20%;">STATUS</th>
+
                 </tr>
             </thead>
             <tbody>
               {% for report in report_data %}
-              <tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="{{ report.subject }}" data-description="{{ report.description }}" data-attachment="{{ report.attachment }}" data-date-reported="{{ report.date_reported|date:'F j, Y' }}" data-time-reported="{{ report.time_reported|date:'H:i' }}" data-barangay="{{ report.barangay }}" data-respondent-name="{{ report.respondent_name }}" data-contact-number="{{ report.contact_number }}" data-longitude="{{report.longitude}}" data-latitude="{{report.latitude}}">
+              <tr class="report-row" data-toggle="modal" data-target="#reportModal"  data-status="{{ report.response_status }}" data-subject="{{ report.subject }}" data-description="{{ report.description }}" data-attachment="{{ report.attachment }}" data-date-reported="{{ report.date_reported|date:'F j, Y' }}" data-time-reported="{{ report.time_reported|date:'H:i' }}" data-barangay="{{ report.barangay }}" data-respondent-name="{{ report.respondent_name }}" data-contact-number="{{ report.contact_number }}" data-longitude="{{report.longitude}}" data-latitude="{{report.latitude}}">
                 <td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                     <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                     <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
@@ -55,6 +62,8 @@
                   <td>{{ report.date_reported|date:'F j, Y' }}</td>
                   <td>{{ report.time_reported|date:'h:i A' }}</td>
                   <td>{{ report.barangay }}</td>
+                  <td>{{ report.response_status }}</td>
+
               </tr>
               {% endfor %}
           </tbody>
@@ -115,6 +124,7 @@
                                   <th>TIME REPORTED</th>
                                   <td><span id="modalTimeReported"></span></td>
                               </tr>
+
                               <tr>
                                 <th>DESCRIPTION</th>
                                 <td><span id="modalDescription"></span></td>
@@ -128,6 +138,10 @@
                             <th>LOCATION</th>
                             <td><span id="modalLocation"></span></td>
                           </tr>
+                          <tr>
+                            <th>STATUS</th>
+                            <td><span id="modalStatus"></span></td>
+                        </tr>
                           </tbody>
                       </table>
                       <label>Location</label>
@@ -157,6 +171,7 @@
       </section>
       
     </main>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.16/jspdf.plugin.autotable.min.js"></script>
     
@@ -190,6 +205,7 @@
     
           $("#modalDateReported").text(formattedDate);
           $("#modalTimeReported").text(formattedTime);
+          $("#modalStatus").text(report.response_status);
 
           var lat = report.latitude; 
           var lng = report.longitude;
@@ -234,6 +250,7 @@
             latitude: $(this).data("latitude"),
             longitude: $(this).data("longitude"),
             barangay: $(this).data("barangay"),
+            response_status: $(this).data("status")
 
           };
           selectedReport = report;
@@ -257,7 +274,7 @@
           console.log("Selected Barangay: " + selectedBarangay);
     
           $.ajax({
-            url: "{% url 'get_filtered_reports_flood' %}",
+            url: "{% url 'get_filtered_reports_typhoon' %}",
             type: "GET",
             data: {
               date: selectedDate,
@@ -287,7 +304,10 @@
                   newRow += '<td>' + report.subject + '</td>';
                   newRow += '<td>' + formattedDate + '</td>';
                   newRow += '<td>' + formattedTime + '</td>';
+
                   newRow += '<td>' + report.barangay + '</td>';
+                  newRow += '<td>' + report.response_status + '</td>';
+
                   
                   newRow += '</tr>';
                   $("#mainTable tbody").append(newRow);
@@ -296,6 +316,35 @@
             },
           });
         });
+        function populateBarangaysDropdown(barangays) {
+                const barangaySelect = $("#barangaySelect");
+
+                barangaySelect.empty(); 
+
+                barangaySelect.append('<option selected disabled>Barangay</option>');
+
+                barangays.forEach(barangay => {
+                    const option = `<option value="${barangay.barangay}">${barangay.barangay}</option>`;
+                    barangaySelect.append(option);
+                });
+            }
+
+            function fetchBarangays() {
+                $.ajax({
+                    url: '/get_barangays/',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log('Received barangays:', data);
+                        populateBarangaysDropdown(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching barangays:', error);
+                    }
+                });
+            }
+
+            fetchBarangays();
     
         $.ajax({
           url: "{% url 'get_barangays' %}",
@@ -317,9 +366,8 @@
           if (selectedReport) {
             var doc = new jsPDF();
             var logos = [
-              "{% static 'capstoneapp/ibaanlogo1.png' %}",
-              "{% static 'capstoneapp/ibaanlogo2.png' %}",
-
+                    "{% static 'capstoneapp/ibaanlogo1.png' %}",
+                    "{% static 'capstoneapp/ibaanlogo2.png' %}"
             ]
             var logoWidth = 20;
             var centerX = doc.internal.pageSize.width / 2 - (logoWidth * 2) / 2;
@@ -337,7 +385,6 @@
             var headerY = startY + logoWidth + 7; 
             doc.setFont(undefined, 'bold');
             doc.text(headerText, pageWidth / 2, headerY, 'center');
-
             const formattedDate = formatDateString(selectedReport.date_reported);
 
             var columns = ["Field", "Details"];
@@ -347,6 +394,8 @@
               ["Barangay", selectedReport.barangay],
               ["Description", selectedReport.description],
               ["Location", $("#modalLocation").text()],
+              ["Status", selectedReport.response_status],
+
             ];
 
             var columnWidths = [50, 100]; 
@@ -360,7 +409,7 @@
               body: data,
               theme: "striped",
               columnStyles: columnStyles,
-              margin: { top: 50 },              
+              margin: { top: startY + logoWidth + 20 },                
             
           });
 
