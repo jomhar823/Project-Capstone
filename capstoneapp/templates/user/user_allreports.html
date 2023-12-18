@@ -137,7 +137,7 @@
                 <tr>
                     <th>SUBJECT</th>
                     <th style="width: 20%;">DATE REPORTED</th>
-                    <!-- <th style="width: 20%;">TIME REPORTED</th> -->
+                    <th style="width: 20%;">TIME REPORTED</th>
                     <th style="width: 20%;">BARANGAY</th>
                 </tr>
             </thead>
@@ -673,6 +673,7 @@
                     const tableRow = `<tr data-toggle="modal" data-target="#reportModal" data-report-id="${report.id}">
                         <td>${report.subject}</td>
                         <td>${formattedDate}</td>
+                        <td>${formattedTime}</td>
                         <td>${report.barangay}</td>
                         
                     </tr>`;
