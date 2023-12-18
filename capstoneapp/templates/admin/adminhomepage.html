@@ -942,6 +942,9 @@
                             if (response.success) {
                                 console.log('Response status updated successfully');
                                 $('#reportModal').modal('hide');
+
+                                window.location.reload();
+
                             } else {
                                 console.error('Failed to update response status');
                             }
