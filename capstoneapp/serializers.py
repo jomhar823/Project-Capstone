@@ -30,7 +30,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Announcement
-        fields = ['subject', 'description', 'date', 'barangay']
+        fields = ['subject', 'description', 'reportedby','date', 'barangay']
 
 class AdminReportSerializer(serializers.ModelSerializer):
     class Meta:

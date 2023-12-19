@@ -76,6 +76,7 @@ class Report(models.Model):
 class Announcement(models.Model):
     subject = models.CharField(max_length=255)
     description = models.TextField()
+    reportedby = models.CharField(max_length=255, blank=True, null=True)
     date = models.DateTimeField(null=True, blank=True)  
     barangay = models.ManyToManyField(CustomUser, related_name='announcements')
 

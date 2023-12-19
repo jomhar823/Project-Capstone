@@ -325,7 +325,8 @@
                   attachment: $(this).data("attachment"),
                   date_reported: $(this).data("date-reported"),
                   time_reported: $(this).data("time-reported"),
-                  response_status: $(this).data("status")
+                  response_status: $(this).data("status"),
+                  barangay: $(this).data("barangay")
                 };
                 selectedReport = report;
                 console.log('selected report', selectedReport)
@@ -357,11 +358,13 @@
                 doc.text(headerText, pageWidth / 2, headerY, 'center');
 
                 const formattedDate = formatDateString(selectedReport.date_reported);
+                const formattedTime = formatTimeString(selectedReport.time_reported);
 
                 var columns = ["Field", "Details"];
                 var data = [
                   ["Subject", selectedReport.subject],
                   ["Date Reported", formattedDate],
+                  ["Time Reported", formattedTime],
                   ["Barangay", selectedReport.barangay],
                   ["Description", selectedReport.description],
                   ["Location", $("#modalLocation").text()],
@@ -457,6 +460,7 @@
                     var selectedReport = {
                         subject: allBarangays[index].subject,
                         date_reported: allBarangays[index].date_reported,
+                        time_reported: allBarangays[index].time_reported,
                         description: allBarangays[index].description,
                         location: allBarangays[index].location,
                         attachment: allBarangays[index].attachment,
@@ -485,6 +489,7 @@
                     var data = [
                         ["Subject", selectedReport.subject],
                         ["Date Reported", selectedReport.date_reported],
+                        ["Time Reported", selectedReport.time_reported],
                         ["Barangay", selectedReport.barangay],
                         ["Description", selectedReport.description],
                         ["Status", selectedReport.response_status],
@@ -805,7 +810,7 @@
                         declinedButton = `<button class='btn btn-sm btn-danger decline-button' data-report-id='${report.id}'>Decline</button>`;
                     }
 
-                    const tableRow = `<tr data-toggle="modal" data-target="#reportModal" data-report-id="${report.id}" data-subject="${report.subject}" data-responded="${report.responded}" data-description="${report.description}" data-attachment="${report.attachment}" data-date-reported="${report.date_reported}" data-status="${report.response_status}">
+                    const tableRow = `<tr data-toggle="modal" data-target="#reportModal" data-report-id="${report.id}"  data-barangay="${report.barangay}"  data-subject="${report.subject}" data-responded="${report.responded}" data-description="${report.description}" data-attachment="${report.attachment}" data-date-reported="${report.date_reported}" data-time-reported="${report.time_reported}" data-status="${report.response_status}">
                         <td>${report.subject}</td>
                         <td>${formattedDate}</td>
                         <td>${formattedTime}</td>

@@ -127,6 +127,10 @@
                                 <td><span id="modalDescription"></span></td>
                             </tr>
                             <tr>
+                              <th>REPORTED BY</th>
+                              <td><span id="modalRespondentName"></span></td>
+                          </tr>
+                            <tr>
                               <th>LOCATION</th>
                               <td><span id="modalLocation"></span></td>
                             </tr>
@@ -200,6 +204,7 @@
           $("#modalDateReported").text(formattedDate);
           $("#modalTimeReported").text(formattedTime);
           $("#modalStatus").text(report.response_status);
+          $("#modalRespondentName").text(report.respondent_name);
 
           var lat = report.latitude; 
           var lng = report.longitude;
@@ -244,7 +249,8 @@
             latitude: $(this).data("latitude"),
             longitude: $(this).data("longitude"),
             barangay: $(this).data("barangay"),
-            response_status: $(this).data("status")
+            response_status: $(this).data("status"),
+            respondent_name: $(this).data("respondent-name")
 
           };
           selectedReport = report;
@@ -294,7 +300,7 @@
                     day: "numeric",
                   });
     
-                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date-reported="' + report.date_reported + '" data-time-reported="' + report.time_reported + '" data-barangay="' + report.barangay + '" data-respondent="' + report.respondent_name + '" data-contact="' + report.contact_number + '" data-longitude="' + report.longitude + '" data-latitude="' + report.latitude + '">';
+                  var newRow = '<tr class="report-row" data-toggle="modal" data-target="#reportModal" data-status="'+ report.response_status + '" data-subject="' + report.subject + '" data-description="' + report.description + '" data-attachment="' + report.attachment + '" data-date-reported="' + report.date_reported + '" data-time-reported="' + report.time_reported + '" data-barangay="' + report.barangay + '" data-respondent="' + report.respondent_name + '" data-contact="' + report.contact_number + '" data-longitude="' + report.longitude + '" data-latitude="' + report.latitude + '">';
                   newRow += '<td class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/></svg></td>';
                   newRow += '<td>' + report.subject + '</td>';
                   newRow += '<td>' + formattedDate + '</td>';
@@ -386,6 +392,7 @@
               ["Date Reported", formattedDate],
               ["Barangay", selectedReport.barangay],
               ["Description", selectedReport.description],
+              ["Reported by", selectedReport.respondent_name],
               ["Location", $("#modalLocation").text()],
               ["Status", selectedReport.response_status],
 

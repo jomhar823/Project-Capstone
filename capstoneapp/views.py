@@ -122,6 +122,8 @@ def home_incident_reports(request):
             'longitude': report.longitude,
             'latitude': report.latitude,
             'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
+
     })
 
     context = {
@@ -187,7 +189,9 @@ def home_typhoon_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
-                                    'response_status': report.response_status,
+            'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
+
         })
 
     context = {
@@ -219,7 +223,8 @@ def home_flood_reports(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
-                                    'response_status': report.response_status,
+            'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
 
         })
 
@@ -252,7 +257,8 @@ def earthquake(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
-                                    'response_status': report.response_status,
+            'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
 
         })
 
@@ -284,7 +290,9 @@ def landslide(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
-                                    'response_status': report.response_status,
+            'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
+
 
         })
 
@@ -316,7 +324,8 @@ def flood(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
-                                    'response_status': report.response_status,
+            'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
 
         })
 
@@ -389,6 +398,7 @@ def incident_reports(request):
             'longitude': report.longitude,
             'latitude': report.latitude,
             'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
     })
 
     context = {
@@ -422,6 +432,7 @@ def user_flood(request):
             'longitude': report.longitude,
             'latitude': report.latitude,
             'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
         })
 
     context = {
@@ -454,6 +465,7 @@ def user_typhoon(request):
             'longitude': report.longitude,
             'latitude': report.latitude,
             'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
 
         })
 
@@ -487,6 +499,8 @@ def user_earthquake(request):
             'longitude': report.longitude,
             'latitude': report.latitude,
             'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
+
         })
 
     context = {
@@ -519,6 +533,7 @@ def user_landslide(request):
             'longitude': report.longitude,
             'latitude': report.latitude,
             'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
         })
 
     context = {
@@ -550,6 +565,7 @@ def user_sit(request):
             'barangay': report.barangay,
             'longitude': report.longitude,
             'latitude': report.latitude,
+            'respondent_name': report.respondent_name,
     })
 
     context = {
@@ -676,14 +692,14 @@ def submit_report(request):
 
             email.send()
 
-            barangay = report.barangay  
-            subject_details = report.subject
-            date_reported = report.date_reported
-            description = report.description
+            # barangay = report.barangay  
+            # subject_details = report.subject
+            # date_reported = report.date_reported
+            # description = report.description
 
-            to_phone_number = '639184240316'
-            notification_message = f'A new report has been submitted by barangay {barangay}.\n\nBarangay: {barangay}\nSubject: {subject_details}\nDate: {date_reported}\nDescription: {description}'
-            send_sms(to_phone_number, notification_message)
+            # to_phone_number = '639184240316'
+            # notification_message = f'A new report has been submitted by barangay {barangay}.\n\nBarangay: {barangay}\nSubject: {subject_details}\nDate: {date_reported}\nDescription: {description}'
+            # send_sms(to_phone_number, notification_message)
 
             return HttpResponseRedirect(reverse('brgyhomepage') + '?success=true')
         else:
@@ -750,6 +766,7 @@ def get_announcement_details(request):
                 'subject': announcement.subject,
                 'date': announcement.date.strftime('%Y-%m-%d'),
                 'description': announcement.description,
+                'reportedby': announcement.reportedby,
                 'barangays': list(announcement.barangay.values('barangay')),
                 'total_barangays_count': total_barangays_count
             }
@@ -846,6 +863,8 @@ def admin_incident_reports(request):
             'longitude': report.longitude,
             'latitude': report.latitude,
             'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
+
 
     })
 
@@ -939,6 +958,8 @@ def admin_typhoon_reports(request):
             'longitude': report.longitude,
             'latitude': report.latitude,
             'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
+
         })
 
     context = {
@@ -971,6 +992,8 @@ def admin_earthquake_reports(request):
             'longitude': report.longitude,
             'latitude': report.latitude,
             'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
+
         })
 
     context = {
@@ -1020,6 +1043,8 @@ def admin_landslide_reports(request):
             'longitude': report.longitude,
             'latitude': report.latitude,
             'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
+
         })
 
     context = {
@@ -1053,6 +1078,8 @@ def admin_flood_reports(request):
             'longitude': report.longitude,
             'latitude': report.latitude,
             'response_status': report.response_status,
+            'respondent_name': report.respondent_name,
+
         })
 
     context = {
@@ -1136,6 +1163,7 @@ def get_announcements(request):
             "id": announcement.id,
             "subject": announcement.subject,
             "description": announcement.description,
+            "reportedby": announcement.reportedby,
             "date": announcement.date.strftime('%Y-%m-%d'), 
             "barangays": barangay_names,
         }
@@ -1302,8 +1330,7 @@ class AnnouncementDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         formatted_date = self.request.data.get('date')
-
-        date_object = datetime.strptime(formatted_date, '%Y-%m-%dT%H:%M:%S.%fZ')
+        date_object = datetime.strptime(formatted_date, '%Y-%m-%d')
 
         serializer.save(date=date_object)
 
@@ -1400,7 +1427,10 @@ def get_filtered_reports(request):
                 'time_reported': report.time_reported.strftime('%H:%M'),
                 'barangay': report.barangay,
                 'longitude': report.longitude,
-                'latitude': report.latitude
+                'latitude': report.latitude,
+                'response_status': report.response_status,
+                'respondent_name': report.respondent_name,
+
             })
 
         return JsonResponse(report_data, safe=False)
@@ -1458,7 +1488,10 @@ def get_filtered_reports_flood(request):
                 'time_reported': report.time_reported.strftime('%H:%M'),
                 'barangay': report.barangay,
                 'longitude': report.longitude,
-                'latitude': report.latitude
+                'latitude': report.latitude,
+                'response_status': report.response_status,
+                'respondent_name': report.respondent_name,
+
             })
 
         return JsonResponse(report_data, safe=False)
@@ -1487,7 +1520,9 @@ def get_filtered_reports_typhoon(request):
                 'time_reported': report.time_reported.strftime('%H:%M'),
                 'barangay': report.barangay,
                 'longitude': report.longitude,
-                'latitude': report.latitude
+                'latitude': report.latitude,
+                'response_status': report.response_status,
+                'respondent_name': report.respondent_name,
             })
 
         return JsonResponse(report_data, safe=False)
@@ -1519,7 +1554,9 @@ def get_filtered_reports_earthquake(request):
                 'time_reported': report.time_reported.strftime('%H:%M'),
                 'barangay': report.barangay,
                 'longitude': report.longitude,
-                'latitude': report.latitude
+                'latitude': report.latitude,
+                'response_status': report.response_status,
+                'respondent_name': report.respondent_name,
             })
 
         return JsonResponse(report_data, safe=False)
@@ -1550,7 +1587,9 @@ def get_filtered_reports_landslide(request):
                 'time_reported': report.time_reported.strftime('%H:%M'),
                 'barangay': report.barangay,
                 'longitude': report.longitude,
-                'latitude': report.latitude
+                'latitude': report.latitude,
+                'response_status': report.response_status,
+                'respondent_name': report.respondent_name,
             })
 
         return JsonResponse(report_data, safe=False)

@@ -130,6 +130,10 @@
                                 <td><span id="modalDescription"></span></td>
                             </tr>
                             <tr>
+                              <th>REPORTED BY</th>
+                              <td><span id="modalRespondentName"></span></td>
+                          </tr>
+                            <tr>
                               <th>ATTACHMENT</th>
                               <td><span id="modalAttachment"></span></td>
                           </tr>
@@ -199,7 +203,7 @@
           $("#modalTimeReported").text(formattedTime);
           $("#modalBarangay").text(report.barangay);
           $("#modalStatus").text(report.response_status);
-
+          $("#modalRespondentName").text(report.respondent_name);
 
           var lat = report.latitude; 
             var lng = report.longitude;
@@ -244,7 +248,8 @@
             barangay: $(this).data("barangay"),
             latitude: $(this).data("latitude"),
             longitude: $(this).data("longitude"),
-            response_status: $(this).data("status")
+            response_status: $(this).data("status"),
+            respondent_name: $(this).data("respondent-name")
 
           };
           selectedReport = report;
@@ -350,7 +355,7 @@
               var headerY = startY + logoWidth + 7; 
               doc.setFont(undefined, 'bold');
               doc.text(headerText, pageWidth / 2, headerY, 'center');
-              doc.text(headerText, pageWidth / 2, 20, 'center'); 
+              // doc.text(headerText, pageWidth / 2, 20, 'center'); 
 
               var columns = ["Field", "Details"];
               var data = [
@@ -359,10 +364,11 @@
                 // ["Time Reported", selectedReport.time_reported],
                 ["Barangay", selectedReport.barangay],
                 ["Description", selectedReport.description],
+                ["Respondent Name", selectedReport.respondent_name],
+
                 ["Location", $("#modalLocation").text()],
                 ["Status", selectedReport.response_status],
 
-                // ["Respondent Name", selectedReport.respondent_name],
                 // ["Contact Number", selectedReport.contact_number],
               ];
 

@@ -107,13 +107,15 @@
               <textarea name="description"class="form-control"  placeholder="Description" required ></textarea><br>
               <label for="date_reported">Date Reported:</label>
               <input type="date" class="form-control" name="date_reported" required><br>
+              <label for="barangay">Reported by:</label>
+                  <input type="text" class="form-control" name="respondent_name"  placeholder="Respondent Name" required><br>
               <label for="attachment">Attachment:</label>
               <input type="file" class="form-control-file" name="attachment"><br>
           </div>
           <div class="parent-container d-flex flex-row justify-content-between">
               <div class="resp-brgy w-100 mr-3">
-                  <label for="barangay">Reported by:</label>
-                  <input type="text" class="form-control" name="respondent_name"  placeholder="Respondent Name" required><br>
+                  <!-- <label for="barangay">Reported by:</label>
+                  <input type="text" class="form-control" name="respondent_name"  placeholder="Respondent Name" required><br> -->
                   <input type="hidden" class="form-control" name="barangay" value="{{user.barangay}}" placeholder="Barangay" readonly><br>
                   <!-- <label for="barangay">Time:</label>
                   <input type="time" class="form-control" name="time_reported" required> -->
