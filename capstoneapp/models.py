@@ -61,7 +61,7 @@ class Report(models.Model):
     subject = models.CharField(max_length=50, choices=SUBJECT_CHOICES)
     description = models.TextField()
     attachment = models.FileField(upload_to='report_attachments/', blank=True, null=True)
-    # respondent_name = models.CharField(max_length=255)
+    respondent_name = models.CharField(max_length=255, blank=True, null=True)
     barangay = models.CharField(max_length=255)
     # contact_number = models.CharField(max_length=20)
     date_reported = models.DateField()
