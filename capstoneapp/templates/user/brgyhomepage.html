@@ -111,6 +111,7 @@
                                         <th>TIME REPORTED</th>
                                     <td><span id="modalTimeReported"></span></td>
                                     </tr>
+                                    
                                     <tr>
                                     <th>BARANGAY</th>
                                     <td><span id="modalBarangay"></span></td>
@@ -119,6 +120,10 @@
                                     <th>DESCRIPTION</th>
                                     <td><span id="modalDescription"></span></td>
                                   </tr>
+                                  <tr>
+                                    <th>REPORTED BY</th>
+                                    <td><span id="modalRespondentName"></span></td>
+                                </tr>
                                 <tr>
                                   <th>ATTACHMENT</th>
                                   <td><div id="editAttachment">
@@ -264,6 +269,8 @@
                   attachment: $(this).data("attachment"),
                   date_reported: $(this).data("date-reported"),
                   time_reported: $(this).data("time-reported"),
+                  respondent_name: $(this).data("respondent-name")
+
                 };
                 selectedReport = report;
                 console.log('selected report', selectedReport)
@@ -290,6 +297,7 @@
                   ["Description", selectedReport.description],
                   ["Location", $("#modalLocation").text()],
                   ["Status", selectedReport.response_status],
+                  ["Reported by", selectedReport.respondent_name],
 
                 ];
 
@@ -368,6 +376,7 @@
                     }
                     $("#modalTimeReported").text(formattedTime);
                     $("#modalStatus").text(data.response_status);
+                    $("#modalRespondentName").text(data.respondent_name);
 
                     var lat = data.latitude; 
                     var lng = data.longitude;
@@ -540,7 +549,7 @@
                     const formattedDate = formatDateString(report.date_reported);
                     const formattedTime = formatTimeString(report.time_reported);
 
-                    const tableRow = `<tr data-toggle="modal" data-target="#reportModal" data-status="{{ report.response_status }}" data-report-id="${report.id}" data-subject="${report.subject}" data-description="${report.description}" data-attachment="${report.attachment}" data-date-reported="${report.date_reported}">
+                    const tableRow = `<tr data-toggle="modal" data-target="#reportModal" data-respondent-name="${report.respondent_name}" data-status="{{ report.response_status }}" data-report-id="${report.id}" data-subject="${report.subject}" data-description="${report.description}" data-attachment="${report.attachment}" data-date-reported="${report.date_reported}">
                         <td>${report.subject}</td>
                         <td>${formattedDate}</td>
                         <td>${formattedTime}</td>
